@@ -31,41 +31,47 @@
         <form id="uploadForm" enctype="multipart/form-data">
             <div class="upload-section">
                 <input type="file" id="fileInput" name="file">
-                <button type="submit">Upload</button>
+                <button type="submit" onclick="uploadFiles()">Upload</button>
             </div>
         </form>
         <ul id="fileList" class="file-list"></ul>
     </div>
 
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+        async function uploadFiles() {
+
+            const owner = 'chrisG759';
+            const repository = 'WEDC-IT_Support';
+            const branch = 'main';
             const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
+            const files = fileInput.files;
 
-                try {
-                    const response = await fetch('/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
+            for (let i = 0; i < files.length; i++){
+                const file = files[i];
+                const content = await file.arrayBuffer();
+                const base64Content = btoa(String.fromCharCode(...new Uint8Array(content)));
 
-                    if (response.ok) {
-                        alert('File uploaded successfully');
-                        fileInput.value = ''; // Reset file input
-                    } else {
-                        alert('File upload failed');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('File upload failed');
-                }
-            } else {
-                alert('Please select a file');
+                const path = `Student_Assignments/${file.name}`;
+
+                const url = `https://api.github.com/repos/${owner}/${repository}/contents/${path}`;
+
+                const response = await fetch(url, {
+                    method : 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Add ${file.name}`,
+                        content: base64Content,
+                        branch: branch
+                    })
+                });
+
+                const result = await response.json();
+                console.log(result);
             }
-        });
+        }
     </script>
 </body>
 </html>
