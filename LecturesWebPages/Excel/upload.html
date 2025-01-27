@@ -6,12 +6,13 @@
     <title>Submit Assignment</title>
     <style>
         .container {
-            margin: 50px;
-            justify-content: center;
+            margin: 50px auto;
             text-align: center;
             border: 1px solid black;
             width: 500px;
             background-color: #ff8e31;
+            padding: 20px;
+            border-radius: 10px;
         }
         .upload-section {
             margin-bottom: 20px;
@@ -20,58 +21,47 @@
             list-style-type: none;
             padding: 0;
         }
-        .file-item {
-            margin: 5px 0;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 style="color: white;">Submit Assignment</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
+        <form id="uploadForm">
             <div class="upload-section">
                 <input type="file" id="fileInput" name="file">
-                <button type="submit" onclick="uploadFiles()">Upload</button>
+                <button type="submit">Upload</button>
             </div>
         </form>
         <ul id="fileList" class="file-list"></ul>
     </div>
 
     <script>
-        async function uploadFiles() {
+        document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
 
-            const owner = 'chrisG759';
-            const repository = 'WEDC-IT_Support';
-            const branch = 'main';
-            const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
-
-            for (let i = 0; i < files.length; i++){
-                const file = files[i];
-                const content = await file.arrayBuffer();
-                const base64Content = btoa(String.fromCharCode(...new Uint8Array(content)));
-
-                const path = `Student_Assignments/${file.name}`;
-
-                const url = `https://api.github.com/repos/${owner}/${repository}/contents/${path}`;
-
-                const response = await fetch(url, {
-                    method : 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: `Add ${file.name}`,
-                        content: base64Content,
-                        branch: branch
-                    })
-                });
-
-                const result = await response.json();
-                console.log(result);
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file to upload.");
+                return;
             }
-        }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const response = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("File uploaded successfully.");
+                console.log(result);
+            } else {
+                alert("Error uploading file.");
+                console.error(result);
+            }
+        });
     </script>
 </body>
 </html>
