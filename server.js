@@ -28,7 +28,7 @@ app.get("/LecturesWebPages/lectures.html", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesWebPages/lectures.html"))
 });
 
-// upload assignment route
+// upload assignment page route
 app.get("/LecturesWebPages/Excel/upload.html", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/upload.html"));
 });
@@ -100,6 +100,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         );
 
         res.json({ message: "File uploaded successfully.", url: githubResponse.data.content.html_url });
+        location.reload();
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         res.status(500).json({ message: "Error uploading file." });

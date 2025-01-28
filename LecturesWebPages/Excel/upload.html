@@ -8,7 +8,6 @@
         .container {
             margin: 50px auto;
             text-align: center;
-            border: 1px solid black;
             width: 500px;
             background-color: #ff8e31;
             padding: 20px;
@@ -21,6 +20,23 @@
             list-style-type: none;
             padding: 0;
         }
+        #submit_but{
+            border-radius: 10px;
+            border: 0px;
+            width: 5cm;
+            height: 1cm;
+            background-color: white;
+            color: orange;
+            font-size: 20px;
+        }
+        #fileInput::file-selector-button{
+            background-color: white;
+            border: 0;
+            height: 1cm;
+            border-radius: 3px;
+            color: #ff8e31;
+            font-family: 'Times New Roman', Times, serif;
+        }
     </style>
 </head>
 <body>
@@ -29,7 +45,7 @@
         <form id="uploadForm">
             <div class="upload-section">
                 <input type="file" id="fileInput" name="file">
-                <button type="submit">Upload</button>
+                <button type="submit" id="submit_but">Upload</button>
             </div>
         </form>
         <ul id="fileList" class="file-list"></ul>
