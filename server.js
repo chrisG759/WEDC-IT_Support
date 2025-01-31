@@ -6,6 +6,7 @@ const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const ejs = require("ejs");
 
 
 
@@ -13,6 +14,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 
 if (!process.env.GITHUB_TOKEN) {
@@ -32,12 +36,12 @@ app.get("/Wedc-It", (req, res) => {
 
 // login path
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "registration.html"));
+    res.sendFile(path.join(__dirname, "/views/registration.ejs"));
 });
 
 // sign-up path
 app.get("/signup", (req, res) => {
-    res.sendFile(path.join(__dirname, "signup.html"));
+    res.render('signup');
 });
 
 // signup functionality
@@ -97,9 +101,10 @@ app.post("/login", (req, res) => {
     const {email, password} = req.body;
 
     if(!email || !password){
-        return res.json({message: "please fill out both input boxes"});
+        return res.sendFile(path.join(__dirname, 'registration.ejs'), );
     }
 
+    // read json for verification
     fs.readFile('students.json', 'utf-8', (err, data) => {
         try{
             var jsonData = JSON.parse(data);
@@ -113,7 +118,6 @@ app.post("/login", (req, res) => {
             console.error(err);
         }
         
-
     });
 });
 
