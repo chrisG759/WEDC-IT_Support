@@ -4,9 +4,16 @@ const multer = require("multer");
 const axios = require("axios");
 const path = require("path");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+
+
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
+
 
 if (!process.env.GITHUB_TOKEN) {
     console.error("GITHUB_TOKEN is missing from .env file.");
@@ -19,8 +26,95 @@ const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 
 // index path
-app.get("/", (req, res) => {
+app.get("/Wedc-It", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// login path
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "registration.html"));
+});
+
+// sign-up path
+app.get("/signup", (req, res) => {
+    res.sendFile(path.join(__dirname, "signup.html"));
+});
+
+// signup functionality
+app.post("/studentSignup", (req, res) => {
+    const { studentEmail, password, confirmPassword } = req.body;
+
+    if (!studentEmail || !password || !confirmPassword) {
+        return res.json({ message: "Email or password not entered" });
+    }
+
+    if (confirmPassword !== password) {
+        return res.json({ message: "Passwords do not match" });
+    }
+
+    fs.readFile('students.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error" });
+        }
+
+        try {
+            let jsonData = JSON.parse(data);
+
+            // Ensure jsonData is an array
+            if (!Array.isArray(jsonData)) {
+                jsonData = [];
+            }
+
+            // Check if student is already registered
+            const existingUser = jsonData.find(student => student.email === studentEmail);
+            if (existingUser) {
+                return res.json({ message: "User already registered" });
+            }
+
+            // Add new user
+            const newUser = { email: studentEmail, password };
+            jsonData.push(newUser);
+
+            // Write back to file
+            fs.writeFile('students.json', JSON.stringify(jsonData, null, 2), (writeErr) => {
+                if (writeErr) {
+                    console.error(writeErr);
+                    return res.status(500).json({ message: "Error saving user" });
+                }
+                return res.json({ message: "User registered successfully" });
+            });
+
+        } catch (parseError) {
+            console.error("Error parsing JSON:", parseError);
+            return res.status(500).json({ message: "Server error" });
+        }
+    });
+});
+
+// login functionality
+app.post("/login", (req, res) => {
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.json({message: "please fill out both input boxes"});
+    }
+
+    fs.readFile('students.json', 'utf-8', (err, data) => {
+        try{
+            var jsonData = JSON.parse(data);
+            const existingUser = jsonData.find(student => student.email === email && student.password === password);
+            if (existingUser){
+                res.sendFile(path.join(__dirname, 'index.html'))
+            } else {
+                return res.json({message: "User not registered"});
+            }
+        } catch(err){
+            console.error(err);
+        }
+        
+
+    });
 });
 
 // wedc IT folder route
