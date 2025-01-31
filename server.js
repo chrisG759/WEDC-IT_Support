@@ -49,11 +49,11 @@ app.post("/studentSignup", (req, res) => {
     const { studentEmail, password, confirmPassword } = req.body;
 
     if (!studentEmail || !password || !confirmPassword) {
-        return res.json({ message: "Email or password not entered" });
+        return res.render("signup", {signupError: "Signup form is not complete"})
     }
 
     if (confirmPassword !== password) {
-        return res.json({ message: "Passwords do not match" });
+        return res.render("signup", {signupError: "Confirm password does not match"})
     }
 
     fs.readFile('students.json', 'utf8', (err, data) => {
@@ -73,7 +73,8 @@ app.post("/studentSignup", (req, res) => {
             // Check if student is already registered
             const existingUser = jsonData.find(student => student.email === studentEmail);
             if (existingUser) {
-                return res.json({ message: "User already registered" });
+
+                return res.render('signup', {signupError: "Student has already registered"});
             }
 
             // Add new user
@@ -101,7 +102,7 @@ app.post("/login", (req, res) => {
     const {email, password} = req.body;
 
     if(!email || !password){
-        return res.sendFile(path.join(__dirname, 'registration.ejs'), );
+        return res.render('registration', {loginError: "Please complete login form"})
     }
 
     // read json for verification
@@ -112,7 +113,7 @@ app.post("/login", (req, res) => {
             if (existingUser){
                 res.sendFile(path.join(__dirname, 'index.html'))
             } else {
-                return res.json({message: "User not registered"});
+                return res.render('registration', {loginError: "Student has not registered"})
             }
         } catch(err){
             console.error(err);
