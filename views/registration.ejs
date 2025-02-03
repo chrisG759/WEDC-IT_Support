@@ -78,8 +78,11 @@
                     <input type="submit">
                 </div>
             </form>
-            <% if(loginError) %>
+            <% if(loginError) {%>
                 <p style="color: red;"><%=  loginError%></p>
+            <%} else if (accountCreated) { %>
+                <p style="color: greenyellow;"><%= accountCreated %></p>
+            <% } %>
         </div>
     
         <div id="signup-link">

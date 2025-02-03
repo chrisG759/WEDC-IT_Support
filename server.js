@@ -7,13 +7,19 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const ejs = require("ejs");
-
+const session = require("express-session");
 
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
+app.use(session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: false}
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -30,18 +36,29 @@ const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 
 // index path
-app.get("/Wedc-It", (req, res) => {
+app.get("/Wedc-It", isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // login path
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/views/registration.ejs"));
+app.get("/", redirectUserIfLoggedIn, (req, res) => {
+    res.render('registration', {loginError: null, accountCreated: null});
 });
 
 // sign-up path
-app.get("/signup", (req, res) => {
-    res.render('signup');
+app.get("/signup", redirectUserIfLoggedIn, (req, res) => {
+    res.render('signup', {signupError: null});
+});
+
+// logout Path
+app.get("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Logout error: ", err);
+            return res.status(500).send("Logout failed.")
+        }
+        res.redirect("/");
+    });
 });
 
 // signup functionality
@@ -87,7 +104,7 @@ app.post("/studentSignup", (req, res) => {
                     console.error(writeErr);
                     return res.status(500).json({ message: "Error saving user" });
                 }
-                return res.json({ message: "User registered successfully" });
+                return res.render('registration', {accountCreated : "Account successfully created", loginError: null})
             });
 
         } catch (parseError) {
@@ -96,6 +113,23 @@ app.post("/studentSignup", (req, res) => {
         }
     });
 });
+
+//redirect authentication function
+function redirectUserIfLoggedIn(req, res, next){
+    if (req.session.user){
+        return res.redirect("/Wedc-It");
+    }
+    next();
+}
+
+// authentication function
+function isAuthenticated(req, res, next){
+    if(req.session.user){
+        return next();
+    } else {
+        return res.redirect("Wedc-It");
+    }
+}
 
 // login functionality
 app.post("/login", (req, res) => {
@@ -109,11 +143,14 @@ app.post("/login", (req, res) => {
     fs.readFile('students.json', 'utf-8', (err, data) => {
         try{
             var jsonData = JSON.parse(data);
+            
             const existingUser = jsonData.find(student => student.email === email && student.password === password);
+            
             if (existingUser){
+                req.session.user = {email};
                 res.sendFile(path.join(__dirname, 'index.html'))
             } else {
-                return res.render('registration', {loginError: "Student has not registered"})
+                return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
             }
         } catch(err){
             console.error(err);

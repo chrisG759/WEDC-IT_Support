@@ -81,9 +81,11 @@
                 </table>
                 <input type="submit" value="Sign Up">
             </form>
-                <% if (signupError)%>
+                <% if (signupError) {%>
                     <p style="color: red;"><%= signupError %></p>
-
+                <% } else { %>
+                    <p></p>
+                <% } %>
                  
         </div>
         <div class="login-link">
