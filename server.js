@@ -175,11 +175,31 @@ app.get("/LecturesWebPages/Excel/excel.html", (req, res) => {
 });
 
 // advanced excel folder route
-app.get("/LecturesWebPages/Excel/advancedExcel.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/advancedExcel.html"));
+app.get("/LecturesWebPages/Teams/teams.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/teams.html"));
 });
 
-// lecture download routes
+// basic teams folder route
+app.get("/LecturesWebPages/Teams/advancedTeam.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/advancedTeam.html"));
+});
+
+// os folder route
+app.get("/LecturesWebPages/OS/os.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/OS/os.html"));
+});
+
+// dbms folder route
+app.get("/LecturesWebPages/DBMS/dbms.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/DBMS/dbms.html"));
+});
+
+// pc hardware folder route
+app.get("/LecturesWebPages/PC_Hardware/pc.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/PC_Hardware/pc.html"));
+});
+
+// Excel lecture download routes
 // lecture 1
 app.get("/LecturesPPT/Excel/L1_Excel.pptx", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L1_Excel.pptx"));
