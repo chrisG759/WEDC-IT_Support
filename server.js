@@ -35,6 +35,49 @@ const REPO_OWNER = "chrisG759";
 const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 
+// const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
+const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
+
+async function deleteOldAssignments() {
+    try {
+        const { data: files } = await axios.get(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/Student_Assignments`, {
+            headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+        });
+
+        const now = Date.now();
+
+        for (const file of files) {
+            const { data: commits } = await axios.get(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits`, {
+                params: {
+                    path: file.path,
+                    sha: BRANCH,
+                    per_page: 1
+                },
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            });
+
+            if (commits.length > 0) {
+                const lastModified = new Date(commits[0].commit.committer.date).getTime();
+                if (now - lastModified > DELETION_THRESHOLD) {
+                    await axios.delete(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${file.path}`, {
+                        headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+                        data: {
+                            message: `Deleting old file: ${file.path}`,
+                            sha: file.sha,
+                            branch: BRANCH
+                        }
+                    });
+                    console.log(`Deleted ${file.path}`);
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Error deleting old files:", error.response?.data || error.message);
+    }
+}
+
+deleteOldAssignments();
+
 // index path
 app.get("/Wedc-It", isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
@@ -395,11 +438,10 @@ app.post("/upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        res.json({ message: "File uploaded successfully.", url: githubResponse.data.content.html_url });
-        location.reload();
+        return res.redirect("/?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
-        res.status(500).json({ message: "Error uploading file." });
+        return res.status(500).json({ message: "Error uploading file." });
     }
 });
 

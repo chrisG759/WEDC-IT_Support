@@ -44,4 +44,10 @@
     <div id="root">
         <a href="LecturesWebPages/lectures.html" class="folder-button">WEDC-IT User Support Specialist 📁</a>
     </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('upload') === "success"){
+            alert("File uploaded successfully");
+        }
+    </script>
 </body>

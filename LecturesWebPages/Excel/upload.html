@@ -37,6 +37,12 @@
             color: #ff8e31;
             font-family: 'Times New Roman', Times, serif;
         }
+        button{
+            cursor: pointer;
+        }
+        input{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -64,18 +70,24 @@
             const formData = new FormData();
             formData.append("file", fileInput.files[0]);
 
-            const response = await fetch("http://localhost:3000/upload", {
+            try{
+                const response = await fetch("http://localhost:3000/upload", {
                 method: "POST",
                 body: formData,
-            });
+                });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert("File uploaded successfully.");
-                console.log(result);
-            } else {
-                alert("Error uploading file.");
-                console.error(result);
+            
+                if (response.ok) {
+                    window.location.href = "/?upload=success";
+                } else {
+                    const result = await response.json();
+                    alert("Error uploading file.");
+                    console.error(result);
+                }
+
+            } catch (error){
+                console.err("Error: ", error);
+                alert("Error uploading files.")
             }
         });
     </script>
