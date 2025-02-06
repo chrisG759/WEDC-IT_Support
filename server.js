@@ -35,8 +35,8 @@ const REPO_OWNER = "chrisG759";
 const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 
-// const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
-const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
+const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
+// const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
 
 async function deleteOldAssignments() {
     try {
