@@ -444,7 +444,7 @@ app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-10.pptx"));
 });
 
-// assignment upload functionality
+// Excel assignment upload functionality
 const upload = multer();
 
 app.post("/excel_upload", upload.single("file"), async (req, res) => {
@@ -454,7 +454,181 @@ app.post("/excel_upload", upload.single("file"), async (req, res) => {
         }
 
         const fileContent = req.file.buffer.toString("base64");
-        const githubFilePath = `Student_Assignments/${Date.now()}-${req.file.originalname}`;
+        const githubFilePath = `Excel_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// Advanced Excel assignment upload
+app.post("/advanced_excel_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `Advanced_Excel_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// Basic teams assignment upload
+app.post("/teams_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `Teams_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// Advanced teams assignment upload
+app.post("/advanced_teams_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `Advanced_Teams_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// OS assignment upload
+app.post("/OS_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `OS_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// DBMS assignment upload
+app.post("/DBMS_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `DBMS_Student_Assignments/${Date.now()}-${req.file.originalname}`;
+
+        const githubResponse = await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
+            {
+                message: `Uploaded ${req.file.originalname}`,
+                content: fileContent,
+                branch: BRANCH,
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+            }
+        );
+
+        return res.redirect("/?upload=success");
+    } catch (error) {
+        console.error("Error uploading file:", error.response?.data || error.message);
+        return res.status(500).json({ message: "Error uploading file." });
+    }
+});
+
+// PC and Hardware assignment upload
+app.post("/PC_HW_upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded." });
+        }
+
+        const fileContent = req.file.buffer.toString("base64");
+        const githubFilePath = `PC_HW_Student_Assignments/${Date.now()}-${req.file.originalname}`;
 
         const githubResponse = await axios.put(
             `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${githubFilePath}`,
