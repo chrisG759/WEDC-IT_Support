@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Assignment</title>
+    <style>
+        .container {
+            margin: 50px auto;
+            text-align: center;
+            width: 500px;
+            background-color: #ff8e31;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .upload-section {
+            margin-bottom: 20px;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #submit_but{
+            border-radius: 10px;
+            border: 0px;
+            width: 5cm;
+            height: 1cm;
+            background-color: white;
+            color: orange;
+            font-size: 20px;
+        }
+        #fileInput::file-selector-button{
+            background-color: white;
+            border: 0;
+            height: 1cm;
+            border-radius: 3px;
+            color: #ff8e31;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        button{
+            cursor: pointer;
+        }
+        input{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: white;">Submit Assignment</h1>
+        <form id="uploadForm">
+            <div class="upload-section">
+                <input type="file" id="fileInput" name="file">
+                <button type="submit" id="submit_but">Upload</button>
+            </div>
+        </form>
+        <ul id="fileList" class="file-list"></ul>
+    </div>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file to upload.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try{
+                const response = await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                body: formData,
+                });
+
+            
+                if (response.ok) {
+                    window.location.href = "/?upload=success";
+                } else {
+                    const result = await response.json();
+                    alert("Error uploading file.");
+                    console.error(result);
+                }
+
+            } catch (error){
+                console.err("Error: ", error);
+                alert("Error uploading files.")
+            }
+        });
+    </script>
+</body>
+</html>

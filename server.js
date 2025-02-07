@@ -207,12 +207,42 @@ app.get("/LecturesWebPages/lectures.html", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesWebPages/lectures.html"))
 });
 
-// upload assignment page route
-app.get("/LecturesWebPages/Excel/upload.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/upload.html"));
+// Excel upload assignment page route
+app.get("/LecturesWebPages/Excel/excelAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/excelAssignmentUpload.html"));
 });
 
-// excel folder route
+// Advanced Excel assignment page route
+app.get("/LecturesWebPages/Excel/advanceExcelAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/advanceExcelAssignmentUpload.html"));
+})
+
+// Basic Teams assignmnet page route
+app.get("/LecturesWebPages/Teams/teamsUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/teamsUpload.html"));
+});
+
+// Advanced teams assignment page route
+app.get("/LecturesWebPages/Teams/advancedTeamsUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/advancedTeamsUpload.html"));
+});
+
+// OS assignment page route
+app.get("/LecturesWebPages/OS/osUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/OS/osUpload.html"));
+});
+
+// PC Hardware assignment page route
+app.get("/LecturesWebPages/PC_Hardware/pcUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/PC_Hardware/pcUpload.html"))
+});
+
+// DBMS upload assignment page route
+app.get("/LecturesWebPages/dbmsAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/DBMS/dbmsAssignmentUpload.html"));
+});
+
+// Excel folder route
 app.get("/LecturesWebPages/Excel/excel.html", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/excel.html"));
 });
@@ -417,7 +447,7 @@ app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
 // assignment upload functionality
 const upload = multer();
 
-app.post("/upload", upload.single("file"), async (req, res) => {
+app.post("/excel_upload", upload.single("file"), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: "No file uploaded." });
