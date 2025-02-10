@@ -35,6 +35,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = "chrisG759";
 const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
+const STUDENTS_JSON_PATH = process.env.STUDENTS_JSON_PATH;
 
 // const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
 const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
@@ -73,14 +74,14 @@ app.post("/studentSignup", (req, res) => {
     const { studentEmail, password, confirmPassword } = req.body;
 
     if (!studentEmail || !password || !confirmPassword) {
-        return res.render("signup", {signupError: "Signup form is not complete"})
+        return res.render("signup", {signupError: "Signup form is not complete"});
     }
 
     if (confirmPassword !== password) {
-        return res.render("signup", {signupError: "Confirm password does not match"})
+        return res.render("signup", {signupError: "Confirm password does not match"});
     }
 
-    fs.readFile('students.json', 'utf8', (err, data) => {
+    fs.readFile(STUDENTS_JSON_PATH, 'utf8', (err, data) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ message: "Server error" });
@@ -97,7 +98,6 @@ app.post("/studentSignup", (req, res) => {
             // Check if student is already registered
             const existingUser = jsonData.find(student => student.email === studentEmail);
             if (existingUser) {
-
                 return res.render('signup', {signupError: "Student has already registered"});
             }
 
@@ -106,12 +106,12 @@ app.post("/studentSignup", (req, res) => {
             jsonData.push(newUser);
 
             // Write back to file
-            fs.writeFile('students.json', JSON.stringify(jsonData, null, 2), (writeErr) => {
+            fs.writeFile(STUDENTS_JSON_PATH, JSON.stringify(jsonData, null, 2), (writeErr) => {
                 if (writeErr) {
                     console.error(writeErr);
                     return res.status(500).json({ message: "Error saving user" });
                 }
-                return res.render('registration', {accountCreated : "Account successfully created", loginError: null})
+                return res.render('registration', {accountCreated : "Account successfully created", loginError: null});
             });
 
         } catch (parseError) {
@@ -140,29 +140,34 @@ function isAuthenticated(req, res, next){
 
 // login functionality
 app.post("/login", (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
-    if(!email || !password){
-        return res.render('registration', {loginError: "Please complete login form"})
+    if (!email || !password) {
+        return res.render('registration', { loginError: "Please complete login form" });
     }
 
     // read json for verification
-    fs.readFile('students.json', 'utf-8', (err, data) => {
-        try{
+    fs.readFile(STUDENTS_JSON_PATH, 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error" });
+        }
+
+        try {
             var jsonData = JSON.parse(data);
-            
+
             const existingUser = jsonData.find(student => student.email === email && student.password === password);
-            
-            if (existingUser){
-                req.session.user = {email};
-                res.sendFile(path.join(__dirname, 'index.html'))
+
+            if (existingUser) {
+                req.session.user = { email };
+                res.sendFile(path.join(__dirname, 'index.html'));
             } else {
                 return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
             }
-        } catch(err){
+        } catch (err) {
             console.error(err);
+            return res.status(500).json({ message: "Server error" });
         }
-        
     });
 });
 
