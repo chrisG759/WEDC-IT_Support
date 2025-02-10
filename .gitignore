@@ -1,6 +1,8 @@
 # Ignore environment variables
 .env
 
+#ignore students.json
+students.json
 
 # Ignore log files
 *.log
