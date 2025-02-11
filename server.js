@@ -139,7 +139,7 @@ function isAuthenticated(req, res, next){
 }
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_PASSWORD = process.env.ADMIN_USERNAME
 
 // login functionality
 app.post("/login", (req, res) => {
@@ -149,32 +149,29 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-
-    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        req.session.user = { email };
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } else {
-        return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
-    }
-
     // read json for verification
-    // fs.readFile(STUDENTS_JSON_PATH, 'utf-8', (err, data) => {
-    //     if (err) {
-    //         console.error(err);
-    //         return res.status(500).json({ message: "Server error" });
-    //     }
+    fs.readFile(STUDENTS_JSON_PATH, 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error" });
+        }
 
-    //     try {
-    //         var jsonData = JSON.parse(data);
+        try {
+            var jsonData = JSON.parse(data);
 
-    //         const existingUser = jsonData.find(student => student.email === email && student.password === password);
+            const existingUser = jsonData.find(student => student.email === email && student.password === password);
 
-            
-    //     } catch (err) {
-    //         console.error(err);
-    //         return res.status(500).json({ message: "Server error" });
-    //     }
-    // });
+            if (existingUser || (email === ADMIN_USERNAME && ADMIN_PASSWORD === password)) {
+                req.session.user = { email };
+                res.sendFile(path.join(__dirname, 'index.html'));
+            } else {
+                return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
+            }
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Server error" });
+        }
+    });
 });
 
 // wedc IT folder route
