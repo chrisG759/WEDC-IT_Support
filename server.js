@@ -133,6 +133,11 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
+    if(email === process.env.ADMIN_USERNAME && email === process.env.ADMIN_PASSWORD){
+        req.session.user = { email };
+        res.sendFile(path.join(__dirname, 'index.html'));
+    }
+
     // read json for verification
     fs.readFile(STUDENTS_JSON_PATH, 'utf-8', (err, data) => {
         if (err) {
@@ -178,21 +183,6 @@ function isAuthenticated(req, res, next) {
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-// login functionality
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.render('registration', { loginError: "Please complete login form" });
-    }
-
-    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        req.session.user = { email };
-        res.sendFile(path.join(__dirname, 'index.html'));
-    } else {
-        return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
-    }
-});
 
 // Upload assignment routes
 const upload = multer({ storage: multer.memoryStorage() });
