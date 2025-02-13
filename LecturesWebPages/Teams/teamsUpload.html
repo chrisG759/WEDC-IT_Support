@@ -71,7 +71,7 @@
             formData.append("file", fileInput.files[0]);
 
             try{
-                const response = await fetch("http://localhost:3000/teams_upload", {
+                const response = await fetch("https://wedc-it-support.vercel.app/teams_upload", {
                 method: "POST",
                 body: formData,
                 });
@@ -86,7 +86,7 @@
                 }
 
             } catch (error){
-                console.err("Error: ", error);
+                console.error("Error: ", error);
                 alert("Error uploading files.")
             }
         });
