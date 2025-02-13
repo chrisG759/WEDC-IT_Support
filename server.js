@@ -366,17 +366,29 @@ app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
 
 // login functionality
 app.post("/login", (req, res) => {
+    console.log("Login route hit");
     const { email, password } = req.body;
 
+    console.log("Email:", email);
+    console.log("Password:", password);
+
     if (!email || !password) {
+        console.log("Incomplete login form");
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
     if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         req.session.user = { email };
-        console.log("User logged in:", req.session.user);
-        res.sendFile(path.join(__dirname, 'index.html'));
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error:", err);
+                return res.status(500).json({ message: "Server error" });
+            }
+            console.log("User logged in:", req.session.user);
+            res.sendFile(path.join(__dirname, 'index.html'));
+        });
     } else {
+        console.log("Invalid email or password");
         return res.render('registration', { loginError: "Invalid email or password", accountCreated: null });
     }
 });
