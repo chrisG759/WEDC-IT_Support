@@ -372,37 +372,13 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-
-    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         req.session.user = { email };
+        console.log("User logged in:", req.session.user);
         res.sendFile(path.join(__dirname, 'index.html'));
     } else {
-        return res.status(500).json({ loginError: "Invalid Username or Password", accountCreated: null });
+        return res.render('registration', { loginError: "Invalid email or password", accountCreated: null });
     }
-
-    // read json for verification
-    // fs.readFile(STUDENTS_JSON_PATH, 'utf-8', (err, data) => {
-    //     if (err) {
-    //         console.error(err);
-           
-    //     }
-
-    //     try {
-    //         var jsonData = JSON.parse(data);
-
-    //         const existingUser = jsonData.find(student => student.email === email && student.password === password);
-
-    //         if (existingUser || (email === ADMIN_USERNAME && ADMIN_PASSWORD === password)) {
-    //             req.session.user = { email };
-    //             res.sendFile(path.join(__dirname, 'index.html'));
-    //         } else {
-    //             return res.render("registration", { loginError: "Invalid email or password", accountCreated: null });
-    //         }
-    //     } catch (err) {
-    //         console.error(err);
-    //         return res.status(500).json({ message: "Server error" });
-    //     }
-    // });
 });
 
 //redirect authentication function
