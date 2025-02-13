@@ -35,11 +35,6 @@ const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 const STUDENTS_JSON_PATH = process.env.STUDENTS_JSON_PATH || './students.json';
 
-// Parse and write the students.json content from the environment variable
-if (process.env.STUDENTS_JSON_CONTENT) {
-    const jsonContent = JSON.parse(process.env.STUDENTS_JSON_CONTENT);
-    fs.writeFileSync(STUDENTS_JSON_PATH, JSON.stringify(jsonContent, null, 2));
-}
 
 // const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
 const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
@@ -374,10 +369,6 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-    if(email === process.env.ADMIN_USERNAME && email === process.env.ADMIN_PASSWORD){
-        req.session.user = { email };
-        res.sendFile(path.join(__dirname, 'index.html'));
-    }
 
     if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD){
         req.session.user = { email };
