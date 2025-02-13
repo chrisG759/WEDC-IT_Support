@@ -124,6 +124,247 @@ app.post("/studentSignup", (req, res) => {
         }
     });
 });
+// wedc IT folder route
+app.get("/LecturesWebPages/lectures.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/lectures.html"))
+});
+
+// Excel upload assignment page route
+app.get("/LecturesWebPages/Excel/excelAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/excelAssignmentUpload.html"));
+});
+
+// Advanced Excel assignment page route
+app.get("/LecturesWebPages/Excel/advanceExcelAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/advanceExcelAssignmentUpload.html"));
+})
+
+// Basic Teams assignmnet page route
+app.get("/LecturesWebPages/Teams/teamsUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/teamsUpload.html"));
+});
+
+// Advanced teams assignment page route
+app.get("/LecturesWebPages/Teams/advancedTeamsUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/advancedTeamsUpload.html"));
+});
+
+// OS assignment page route
+app.get("/LecturesWebPages/OS/osUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/OS/osUpload.html"));
+});
+
+// PC Hardware assignment page route
+app.get("/LecturesWebPages/PC_Hardware/pcUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/PC_Hardware/pcUpload.html"))
+});
+
+// DBMS upload assignment page route
+app.get("/LecturesWebPages/dbmsAssignmentUpload.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/DBMS/dbmsAssignmentUpload.html"));
+});
+
+// Excel folder route
+app.get("/LecturesWebPages/Excel/excel.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/excel.html"));
+});
+
+// advanced excel folder route
+app.get("/LecturesWebPages/Excel/advancedExcel.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Excel/advancedExcel.html"));
+});
+
+// basic teams folder route
+app.get("/LecturesWebPages/Teams/teams.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/teams.html"));
+});
+
+// advanced teams folder route
+app.get("/LecturesWebPages/Teams/advancedTeam.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/Teams/advancedTeam.html"));
+});
+
+// os folder route
+app.get("/LecturesWebPages/OS/os.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/OS/os.html"));
+});
+
+// dbms folder route
+app.get("/LecturesWebPages/DBMS/dbms.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/DBMS/dbms.html"));
+});
+
+// pc hardware folder route
+app.get("/LecturesWebPages/PC_Hardware/pc.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesWebPages/PC_Hardware/pc.html"));
+});
+
+// Excel lecture download routes
+// lecture 1
+app.get("/LecturesPPT/Excel/L1_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L1_Excel.pptx"));
+});
+
+// lecture 2
+app.get("/LecturesPPT/Excel/L2_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L2_Excel.pptx"));
+});
+
+// lecture 3
+app.get("/LecturesPPT/Excel/L3_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L3_Excel.pptx"));
+});
+
+// lecture 4
+app.get("/LecturesPPT/Excel/L4_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L4_Excel.pptx"));
+});
+
+// lecture 5
+app.get("/LecturesPPT/Excel/L5_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L5_Excel.pptx"));
+});
+
+// lecture 6
+app.get("/LecturesPPT/Excel/L6_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L6_Excel.pptx"));
+});
+
+// advanced excel lecture download
+//lecture 4
+app.get("/LecturesPPT/Excel/L4_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L4_Excel.pptx"));
+});
+
+// lecture 5
+app.get("/LecturesPPT/Excel/L5_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L5_Excel.pptx"));
+});
+
+// lecture 6
+app.get("/LecturesPPT/Excel/L6_Excel.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Excel/L6_Excel.pptx"));
+});
+
+// teams lecture downloads
+// lecture 1
+app.get("/LecturesPPT/Teams/lecture_1_teams.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Teams/lecture_1_teams.pptx"));
+});
+
+// advanced teams lecure downloads
+// lecture 2
+app.get("/LecturesPPT/Teams/lecture_2_teams.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Teams/lecture_2_teams.pptx"));
+});
+
+// lecture 3
+app.get("/LecturesPPT/Teams/lecture_3_teams.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/Teams/lecture_3_teams.pptx"));
+});
+
+// os lecture downloads
+// basics
+app.get("/LecturesPPT/OS/OS-Basic.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/OS-Basic.pptx"));
+});
+
+// lecture 1
+app.get("/LecturesPPT/OS/Lecture-1-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-1-new.pptx"));
+});
+
+// lecture 2
+app.get("/LecturesPPT/OS/Lecture-2-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-2-new.pptx"));
+});
+
+// lecture 3
+app.get("/LecturesPPT/OS/Lecture-3-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-3-new.pptx"));
+});
+
+// lecture 4
+app.get("/LecturesPPT/OS/Lecture-4-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-4-new.pptx"));
+});
+
+// lecture 5
+app.get("/LecturesPPT/OS/Lecture-5-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-5-new.pptx"));
+});
+
+// lecture 6
+app.get("/LecturesPPT/OS/Lecture-6-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-6-new.pptx"));
+});
+
+// lecture 7
+app.get("/LecturesPPT/OS/Lecture-7-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-7-new.pptx"));
+});
+
+// lecture 8
+app.get("/LecturesPPT/OS/Lecture-8-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-8-new.pptx"));
+});
+
+// lecture 9
+app.get("/LecturesPPT/OS/Lecture-9-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-9-new.pptx"));
+});
+
+// installing os system lecture 
+app.get("/LecturesPPT/OS/Intalling-OS-System.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Intalling-OS-System.pptx"));
+});
+
+// lecture 11
+app.get("/LecturesPPT/OS/Lecture-11-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-11-new.pptx"));
+});
+
+// lecture 12
+app.get("/LecturesPPT/OS/Lecture-12-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-12-new.pptx"));
+});
+
+// lecture 13
+app.get("/LecturesPPT/OS/Lecture-13-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-13-new.pptx"));
+});
+
+// lecture 14
+app.get("/LecturesPPT/OS/Lecture-14-new.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/OS/Lecture-14-new.pptx"));
+});
+
+// dbms lecture downloads
+// lecture 1
+app.get("/LecturesPPT/DBMS/Lecture-1-DBMS.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/DBMS/Lecture-1-DBMS.pptx"));
+});
+
+// pc hardware lecture downloads
+// lecture 6
+app.get("/LecturesPPT/PC_Hardware/Lecture-6.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-6.pptx"));
+});
+
+// lecture 7
+app.get("/LecturesPPT/PC_Hardware/Lecture-7.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-7.pptx"));
+});
+
+// lecture 8
+app.get("/LecturesPPT/PC_Hardware/Lecture-8.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-8.pptx"));
+});
+
+// lecture 10
+app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
+    res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-10.pptx"));
+});
 
 // login functionality
 app.post("/login", (req, res) => {
