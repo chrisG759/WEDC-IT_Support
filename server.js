@@ -9,7 +9,6 @@ const fs = require("fs");
 const ejs = require("ejs");
 const session = require("express-session");
 const assignmentDeletion = require("./assignmentDeletionController");
-const MongoStore = require('connect-mongo');
 
 const app = express();
 app.use(cors({
