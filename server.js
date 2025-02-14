@@ -19,8 +19,8 @@ app.use(session({
     resave: false,           
     saveUninitialized: false, 
     cookie: { 
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
+        maxAge: 60000 * 60 * 24,
+        secure: true
     }  
   }));
 
@@ -405,15 +405,12 @@ function redirectUserIfLoggedIn(req, res, next) {
     next();
 }
 
-// authentication function
 function isAuthenticated(req, res, next) {
-    console.log("Session user: ", req.session.user);
-    if (req.session.user) {
+    if (req.session && req.session.user) {
         return next();
-    } else {
-        return res.redirect("/");
     }
-    
+    console.log("No session found, redirecting...");
+    res.redirect("/");
 }
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
