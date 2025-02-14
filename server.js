@@ -9,20 +9,25 @@ const fs = require("fs");
 const ejs = require("ejs");
 const session = require("express-session");
 const assignmentDeletion = require("./assignmentDeletionController");
+const MongoStore = require('connect-mongo');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "https://wedc-it-support.vercel.app",
+    credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: true,
+    secret: process.env.SECRET_KEY, 
+    resave: false,           
+    saveUninitialized: false, 
     cookie: { 
-        secure: process.env.NODE_ENV === 'production', 
-        httpOnly: true 
-    }
-}));
+        secure: true,
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production'
+    }  
+  }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -67,9 +72,11 @@ app.get("/logout", (req, res) => {
             console.error("Logout error: ", err);
             return res.status(500).send("Logout failed.");
         }
+        res.clearCookie('connect.sid');
         res.redirect("/");
     });
 });
+
 
 // signup functionality
 app.post("/studentSignup", (req, res) => {
@@ -379,19 +386,21 @@ app.post("/login", (req, res) => {
 
     if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         req.session.user = { email };
+        req.session.isAuthenticated = true; // Can be used to check for login status
         req.session.save((err) => {
             if (err) {
                 console.error("Session save error:", err);
                 return res.status(500).json({ message: "Server error" });
             }
             console.log("User logged in:", req.session.user);
-            res.sendFile(path.join(__dirname, 'index.html'));
+            return res.redirect('/Wedc-It'); // Redirect to a proper page after login
         });
     } else {
         console.log("Invalid email or password");
         return res.render('registration', { loginError: "Invalid email or password", accountCreated: null });
     }
 });
+
 
 //redirect authentication function
 function redirectUserIfLoggedIn(req, res, next) {
@@ -403,11 +412,13 @@ function redirectUserIfLoggedIn(req, res, next) {
 
 // authentication function
 function isAuthenticated(req, res, next) {
+    console.log("Session user: ", req.session.user);
     if (req.session.user) {
         return next();
     } else {
-        return res.redirect("/Wedc-It");
+        return res.redirect("/");
     }
+    
 }
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
