@@ -6,3 +6,6 @@ students.json
 
 # Ignore log files
 *.log
+
+.vercel
+

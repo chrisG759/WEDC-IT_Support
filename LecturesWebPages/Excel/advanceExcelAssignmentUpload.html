@@ -79,7 +79,7 @@
 
             
                 if (response.ok) {
-                    window.location.href = "/LecturesWebPages/lectures.html";
+                    window.location.href = "/index.html?upload=success";
                 } else {
                     const result = await response.json();
                     alert("Error uploading file.");

@@ -388,7 +388,7 @@ app.post("/login", (req, res) => {
                 return res.status(500).json({ message: "Server error" });
             }
             console.log("User logged in:", req.session.user);
-            return res.redirect('/Wedc-It'); // Redirect to a proper page after login
+            return res.sendFile(path.join(__dirname, "index.html"));
         });
     } else {
         console.log("Invalid email or password");
@@ -441,7 +441,7 @@ app.post("/excel_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -470,7 +470,7 @@ app.post("/advanced_excel_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -499,7 +499,7 @@ app.post("/teams_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -528,7 +528,7 @@ app.post("/advanced_teams_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -557,7 +557,7 @@ app.post("/OS_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -586,7 +586,7 @@ app.post("/DBMS_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
@@ -615,7 +615,7 @@ app.post("/PC_HW_upload", upload.single("file"), async (req, res) => {
             }
         );
 
-        return res.redirect("/?upload=success");
+        return res.redirect("/index.html?upload=success");
     } catch (error) {
         console.error("Error uploading file:", error.response?.data || error.message);
         return res.status(500).json({ message: "Error uploading file." });
