@@ -78,7 +78,8 @@
 
             
                 if (response.ok) {
-                    window.location.href = "https://wedc-it-support.vercel.app/index.html?upload=success";
+                    const result = await response.json();
+                    window.location.href = result.redirectUrl;
                 } else {
                     const result = await response.json();
                     alert("Error uploading file.");
