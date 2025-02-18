@@ -78,8 +78,8 @@
 
             
                 if (response.ok) {
-                    const result = await response.json();
-                    window.location.href = result.redirectUrl;
+                    alert("Assignment uploaded successfully!");
+                    fileInput.value = '';
                 } else {
                     const result = await response.json();
                     alert("Error uploading file.");
