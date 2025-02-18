@@ -45,7 +45,7 @@ const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
 assignmentDeletion.deleteAllAssignments();
 
 // index path
-app.get("/Wedc-It", isAuthenticated, (req, res) => {
+app.get("/Wedc-It", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
