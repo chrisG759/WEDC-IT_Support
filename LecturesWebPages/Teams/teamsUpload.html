@@ -43,6 +43,23 @@
         input{
             cursor: pointer;
         }
+        .back_buts{
+            display: flex;
+            margin: 0;
+            justify-content: center;
+        }
+        .back_buts form button{
+            text-align: center;
+            background-color: #f4a261;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
     </style>
 </head>
 <body>
@@ -56,7 +73,19 @@
         </form>
         <ul id="fileList" class="file-list"></ul>
     </div>
-
+    <div class="back_buts">
+        <form action="/Wedc-It">
+            <button type="submit">Back to Home</button>
+        </form>
+        <button style="visibility: hidden;"></button>
+        <form action="/LecturesWebPages/lectures.html">
+            <button type="submit">Back to Courses</button>
+        </form>
+        <button style="visibility: hidden;"></button>
+        <form action="/LecturesWebPages/Teams/teams.html">
+            <button type="submit">Back to Lectures</button>
+        </form>
+    </div>
     <script>
         document.getElementById("uploadForm").addEventListener("submit", async function(event) {
             event.preventDefault();
