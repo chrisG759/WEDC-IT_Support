@@ -36,7 +36,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO_OWNER = "chrisG759";
 const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
-const STUDENTS_JSON_PATH = process.env.STUDENTS_JSON_PATH || './students.json';
+const STUDENTS_JSON_PATH = path.join(__dirname, "students.json");
 
 
 // const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
@@ -72,9 +72,8 @@ app.get("/logout", (req, res) => {
     });
 });
 
-
-// signup functionality
-app.post("/studentSignup", (req, res) => {
+// Sign up functionality
+app.post("/studentSignup", async (req, res) => {
     const { studentEmail, password, confirmPassword } = req.body;
 
     if (!studentEmail || !password || !confirmPassword) {
@@ -85,45 +84,57 @@ app.post("/studentSignup", (req, res) => {
         return res.render("signup", { signupError: "Confirm password does not match" });
     }
 
-    fs.readFile(STUDENTS_JSON_PATH, 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error reading students.json:", err);
-            return res.status(500).json({ message: "Server error" });
+    try {
+        // Instead of reading local file, get the file from GitHub
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/students.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        // Decode the content from base64
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        let jsonData = JSON.parse(content);
+
+        // Check if student exists
+        const existingUser = jsonData.find(student => student.email === studentEmail);
+        if (existingUser) {
+            return res.render('signup', { signupError: "Student has already registered" });
         }
 
-        try {
-            let jsonData = JSON.parse(data);
+        // Add new user
+        const newUser = { 
+            email: studentEmail, 
+            password
+        };
+        jsonData.push(newUser);
 
-            // Ensure jsonData is an array
-            if (!Array.isArray(jsonData)) {
-                jsonData = [];
+        // Update the file in GitHub
+        await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/students.json`,
+            {
+                message: 'Add new student',
+                content: Buffer.from(JSON.stringify(jsonData, null, 2)).toString('base64'),
+                sha: response.data.sha,
+                branch: BRANCH
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
             }
+        );
 
-            // Check if student is already registered
-            const existingUser = jsonData.find(student => student.email === studentEmail);
-            if (existingUser) {
-                return res.render('signup', { signupError: "Student has already registered" });
-            }
+        return res.render('registration', { 
+            accountCreated: "Account successfully created", 
+            loginError: null 
+        });
 
-            // Add new user
-            const newUser = { email: studentEmail, password };
-            jsonData.push(newUser);
-
-            // Write back to file
-            fs.writeFile(STUDENTS_JSON_PATH, JSON.stringify(jsonData, null, 2), (writeErr) => {
-                if (writeErr) {
-                    console.error("Error writing to students.json:", writeErr);
-                    return res.status(500).json({ message: "Error saving user" });
-                }
-                return res.render('registration', { accountCreated: "Account successfully created", loginError: null });
-            });
-
-        } catch (parseError) {
-            console.error("Error parsing JSON:", parseError);
-            return res.status(500).json({ message: "Server error" });
-        }
-    });
+    } catch (error) {
+        console.error("Error in signup process:", error);
+        return res.render("signup", { signupError: "Error saving user: " + error.message });
+    }
 });
+
 // wedc IT folder route
 app.get("/LecturesWebPages/lectures.html", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesWebPages/lectures.html"))
@@ -367,7 +378,7 @@ app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
 });
 
 // login functionality
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     console.log("Login route hit");
     const { email, password } = req.body;
 
@@ -379,38 +390,62 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-    fs.readFile(STUDENTS_JSON_PATH, 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error reading students.json:", err);
-            return res.status(500).json({ message: "Server error" });
-        }
-
-        try {
-            const students = JSON.parse(data);
-            const student = students.find(s => s.email === email && s.password === password);
-
-            if(student){
-                req.session.user = {email, isStudent: true};
-                req.session.isAuthenticated = true;
-                req.session.save((err) => {
-                    if(err){
-                        console.error("Session save error: ", error);
-                        return res.status(500).json({message: "Server error"});
-                    }
-                    console.log("Student logged in: ", req.session.user);
-                    return res.sendFile(path.join(__dirname, "index.html"));
-                })
-            } else {
-                console.log("Invalid email or password");
-                return res.render("registration", {loginError: "Invalid email or password", accountCreated: null});
+    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        req.session.user = { email, isAdmin: true };
+        req.session.isAuthenticated = true;
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error:", err);
+                return res.status(500).json({ message: "Server error" });
             }
+            console.log("Admin logged in:", req.session.user);
+            return res.sendFile(path.join(__dirname, "index.html"));
+        });
+        return;
+    }
 
-        } catch (parseError) {
-            console.error("Error parsing JSON:", parseError);
-            return res.status(500).json({ message: "Server error" });
+    try {
+        // Get students.json from GitHub
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/students.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        // Decode the content from base64
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const students = JSON.parse(content);
+
+        // Find student
+        const student = students.find(s => s.email === email && s.password === password);
+
+        if (student) {
+            req.session.user = { email, isStudent: true };
+            req.session.isAuthenticated = true;
+            req.session.save((err) => {
+                if (err) {
+                    console.error("Session save error:", err);
+                    return res.status(500).json({ message: "Server error" });
+                }
+                console.log("Student logged in:", req.session.user);
+                return res.sendFile(path.join(__dirname, "index.html"));
+            });
+        } else {
+            console.log("Invalid email or password");
+            return res.render("registration", { 
+                loginError: "Invalid email or password", 
+                accountCreated: null 
+            });
         }
-    });
 
+    } catch (error) {
+        console.error("Error in login process:", error);
+        return res.render("registration", { 
+            loginError: "Login error occurred", 
+            accountCreated: null 
+        });
+    }
 });
 
 
