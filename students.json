@@ -2,5 +2,9 @@
   {
     "email": "techCentro@deployment.com",
     "password": "b7nfLZXZRSgE"
+  },
+  {
+    "email": "test@example.com",
+    "password": "test"
   }
 ]
