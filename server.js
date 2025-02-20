@@ -379,21 +379,38 @@ app.post("/login", (req, res) => {
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        req.session.user = { email };
-        req.session.isAuthenticated = true; // Can be used to check for login status
-        req.session.save((err) => {
-            if (err) {
-                console.error("Session save error:", err);
-                return res.status(500).json({ message: "Server error" });
+    fs.readFile(STUDENTS_JSON_PATH, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Error reading students.json:", err);
+            return res.status(500).json({ message: "Server error" });
+        }
+
+        try {
+            const students = JSON.parse(data);
+            const student = students.find(s => s.email === email && s.password === password);
+
+            if(student){
+                req.session.user = {email, isStudent: true};
+                req.session.isAuthenticated = true;
+                req.session.save((err) => {
+                    if(err){
+                        console.error("Session save error: ", error);
+                        return res.status(500).json({message: "Server error"});
+                    }
+                    console.log("Student logged in: ", req.session.user);
+                    return res.sendFile(path.join(__dirname, "index.html"));
+                })
+            } else {
+                console.log("Invalid email or password");
+                return res.render("registration", {loginError: "Invalid email or password", accountCreated: null});
             }
-            console.log("User logged in:", req.session.user);
-            return res.sendFile(path.join(__dirname, "index.html"));
-        });
-    } else {
-        console.log("Invalid email or password");
-        return res.render('registration', { loginError: "Invalid email or password", accountCreated: null });
-    }
+
+        } catch (parseError) {
+            console.error("Error parsing JSON:", parseError);
+            return res.status(500).json({ message: "Server error" });
+        }
+    });
+
 });
 
 
