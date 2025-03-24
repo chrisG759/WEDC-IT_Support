@@ -32,12 +32,21 @@
             font-size: 15px;
             cursor: pointer;
         }
-        
+        .welcome-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .admin-only {
+            display: none;
+        }
     </style>
-
 </head>
 
 <body>
+    <div id="welcomeMessage" class="welcome-message"></div>
     <form action="/logout">
         <button type="submit">Logout</button>
     </form>
@@ -49,5 +58,27 @@
         if (urlParams.get('upload') === "success"){
             alert("File uploaded successfully");
         }
+
+        // Get role from URL parameter and store in sessionStorage
+        const role = urlParams.get('role');
+        if (role) {
+            sessionStorage.setItem('userRole', role);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user role is stored in sessionStorage
+            const userRole = sessionStorage.getItem('userRole');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            if (userRole === 'admin') {
+                welcomeMessage.textContent = 'Welcome Administrator!';
+                // Show admin-specific elements
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            } else if (userRole === 'student') {
+                welcomeMessage.textContent = 'Welcome Student!';
+                // Hide admin-specific elements
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+            }
+        });
     </script>
 </body>

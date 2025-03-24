@@ -58,6 +58,17 @@
         .login-link {
             margin-top: 10px;
         }
+        #roleSelection{
+            width: 5cm;
+            height: 1cm;
+            background-color: light;
+            border-radius: 1cm;
+            border: 3px solid white;
+            text-align: center;
+            margin-bottom: .5cm;
+            background-color: #ffa863;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -66,6 +77,14 @@
         <div class="signup-form">
             <form action="/studentSignup" method="post">
                 <table>
+                    <tr>
+                        <h3>Choose Role:</h3>
+                        <select name="role" id="roleSelection">
+                            <option value="role">Role</option>
+                            <option value="student">Student</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </tr>
                     <tr>
                         <td><label for="studentEmail">Student Email: </label></td>
                         <td><input type="text" id="studentEmail" name="studentEmail"></td>

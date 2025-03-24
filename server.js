@@ -74,15 +74,16 @@ app.get("/logout", (req, res) => {
 
 // Sign up functionality
 app.post("/studentSignup", async (req, res) => {
-    const { studentEmail, password, confirmPassword } = req.body;
+    const { studentEmail, password, confirmPassword, role } = req.body;
 
-    if (!studentEmail || !password || !confirmPassword) {
+    if (!studentEmail || !password || !confirmPassword || role === "role") {
         return res.render("signup", { signupError: "Signup form is not complete" });
     }
 
     if (confirmPassword !== password) {
         return res.render("signup", { signupError: "Confirm password does not match" });
     }
+
 
     try {
         // Instead of reading local file, get the file from GitHub
@@ -106,7 +107,8 @@ app.post("/studentSignup", async (req, res) => {
         // Add new user
         const newUser = { 
             email: studentEmail, 
-            password
+            password: password,
+            role: role
         };
         jsonData.push(newUser);
 
@@ -377,35 +379,15 @@ app.get("/LecturesPPT/PC_Hardware/Lecture-10.pptx", (req, res) => {
     res.sendFile(path.join(__dirname, "/LecturesPPT/PC_Hardware/Lecture-10.pptx"));
 });
 
-// login functionality
+// Login functionality
 app.post("/login", async (req, res) => {
-    console.log("Login route hit");
     const { email, password } = req.body;
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-
     if (!email || !password) {
-        console.log("Incomplete login form");
         return res.render('registration', { loginError: "Please complete login form" });
     }
 
-    if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        req.session.user = { email, isAdmin: true };
-        req.session.isAuthenticated = true;
-        req.session.save((err) => {
-            if (err) {
-                console.error("Session save error:", err);
-                return res.status(500).json({ message: "Server error" });
-            }
-            console.log("Admin logged in:", req.session.user);
-            return res.sendFile(path.join(__dirname, "index.html"));
-        });
-        return;
-    }
-
     try {
-        // Get students.json from GitHub
         const response = await axios.get(
             `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/students.json`,
             {
@@ -413,32 +395,33 @@ app.post("/login", async (req, res) => {
             }
         );
 
-        // Decode the content from base64
         const content = Buffer.from(response.data.content, 'base64').toString();
         const students = JSON.parse(content);
-
-        // Find student
         const student = students.find(s => s.email === email && s.password === password);
 
         if (student) {
-            req.session.user = { email, isStudent: true };
+            req.session.user = {
+                email,
+                role: student.role,
+                isAdmin: student.role === 'admin'
+            };
             req.session.isAuthenticated = true;
+
             req.session.save((err) => {
                 if (err) {
                     console.error("Session save error:", err);
-                    return res.status(500).json({ message: "Server error" });
+                    return res.status(500).send("Server error");
                 }
-                console.log("Student logged in:", req.session.user);
-                return res.sendFile(path.join(__dirname, "index.html"));
+                console.log(`${student.role} logged in:`, req.session.user);
+                // Redirect to index page with role parameter
+                res.redirect(`/Wedc-It?role=${student.role}`);
             });
         } else {
-            console.log("Invalid email or password");
             return res.render("registration", { 
                 loginError: "Invalid email or password", 
                 accountCreated: null 
             });
         }
-
     } catch (error) {
         console.error("Error in login process:", error);
         return res.render("registration", { 
