@@ -10,5 +10,29 @@
   {
     "email": "test2@example.com",
     "password": "test2"
+  },
+  {
+    "email": "testRole@email.com",
+    "password": "roletest"
+  },
+  {
+    "email": "roletest2@example.com",
+    "password": "roletest2",
+    "role": "role"
+  },
+  {
+    "email": "role@test.com",
+    "password": "role",
+    "role": "student"
+  },
+  {
+    "email": "Hello",
+    "password": "Hello",
+    "role": "role"
+  },
+  {
+    "email": "admintest@admin.com",
+    "password": "admin",
+    "role": "admin"
   }
 ]
