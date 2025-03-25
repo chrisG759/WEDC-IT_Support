@@ -20,7 +20,7 @@
             margin: 40px;
         }
         form{
-            text-align: right;
+            text-align: center;
         }
         form button{
             width: 3cm;
@@ -42,23 +42,47 @@
         .admin-only {
             display: none;
         }
+        .admin-header{
+            margin: 0 auto;
+        }
+        #adminLinks-list{
+            display: flex;
+            justify-content: center;
+        }
+        #adminLinks-list li{
+            list-style-type: none;
+            margin-left: 1cm;
+            margin-right: 1.1cm;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f4a261;
+            color: white;
+            margin-top: .5cm;
+            margin-bottom: .5cm;
+        }
+
+        #adminLinks-list li a{
+            text-decoration: none;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
     <div id="welcomeMessage" class="welcome-message"></div>
+    <form action="/logout">
+        <button type="submit">Logout</button>
+    </form>
     <div class="admin-header">
         <header>
-            <ul>
+            <ul id="adminLinks-list">
                 <li><a href="/admin-grade">Grades</a></li>
                 <li><a href="/admin-modules">Modules</a></li>
                 <li><a href="/admin-accounts">Registrations</a></li>
             </ul>
         </header>
     </div>
-    <form action="/logout">
-        <button type="submit">Logout</button>
-    </form>
+    
     <div id="root">
         <a href="LecturesWebPages/lectures.html" class="folder-button">WEDC-IT User Support Specialist</a>
     </div>
