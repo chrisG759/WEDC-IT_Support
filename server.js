@@ -9,6 +9,7 @@ const fs = require("fs");
 const ejs = require("ejs");
 const session = require("express-session");
 const assignmentDeletion = require("./assignmentDeletionController");
+const adminControl = require('./adminController');
 
 const app = express();
 app.use(cors());
@@ -38,11 +39,18 @@ const REPO_NAME = "WEDC-IT_Support";
 const BRANCH = "main";
 const STUDENTS_JSON_PATH = path.join(__dirname, "students.json");
 
-
-// const DELETION_THRESHOLD = 60000 * 60 * 24 * 31 * 6; // set to 6 months
-const DELETION_THRESHOLD = 30000; // test timing(30 seconds)
-
 assignmentDeletion.deleteAllAssignments();
+
+// Admin paths
+// Admin-Grades
+app.get('/admin-grade', adminControl.getGrades);
+// Visable Modules for Students
+app.get('/admin-modules', adminControl.getModules);
+// Account Registrations page
+app.get('/admin-accounts', adminControl.getAccountsPage);
+// Send accounts to registrations page
+app.get('/admin-accounts-data', adminControl.getAccounts);
+
 
 // index path
 app.get("/Wedc-It", (req, res) => {

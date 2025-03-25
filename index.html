@@ -47,6 +47,15 @@
 
 <body>
     <div id="welcomeMessage" class="welcome-message"></div>
+    <div class="admin-header">
+        <header>
+            <ul>
+                <li><a href="/admin-grade">Grades</a></li>
+                <li><a href="/admin-modules">Modules</a></li>
+                <li><a href="/admin-accounts">Registrations</a></li>
+            </ul>
+        </header>
+    </div>
     <form action="/logout">
         <button type="submit">Logout</button>
     </form>
@@ -74,10 +83,12 @@
                 welcomeMessage.textContent = 'Welcome Administrator!';
                 // Show admin-specific elements
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                document.querySelector('.admin-header').style.display = 'block';
             } else if (userRole === 'student') {
                 welcomeMessage.textContent = 'Welcome Student!';
                 // Hide admin-specific elements
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                document.querySelector('.admin-header').style.display = 'none';
             }
         });
     </script>
