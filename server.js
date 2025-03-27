@@ -347,10 +347,6 @@ function isAuthenticated(req, res, next) {
     res.redirect("/");
 }
 
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
-
 // Upload assignment routes
 const upload = multer({ storage: multer.memoryStorage() });
 
