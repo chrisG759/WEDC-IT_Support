@@ -28,7 +28,7 @@ app.use(session({
   }));
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'AdminWebPages')]);
 
 if (!process.env.GITHUB_TOKEN) {
     console.error("GITHUB_TOKEN is missing from .env file.");
@@ -50,8 +50,8 @@ app.get('/admin-grade', adminControl.getGrades);
 app.get('/admin-modules', adminControl.getModules);
 // Account Registrations page
 app.get('/admin-accounts', adminControl.getAccountsPage);
-// Send accounts to registrations page
-app.get('/admin-accounts-data', adminControl.getAccounts);
+//delete account
+app.post('/admin-deleteAccount', adminControl.deleteRegistration)
 
 
 // index path

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Accounts</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Email</td>
+            <td>Role</td>
+            <td>Action</td>
+        </tr>
+        <% for (let user of users) { %>
+            <tr>
+                <td><%= user.email %></td>
+                <td><%= user.role %></td>
+                <td>
+                    <form action="/admin-deleteAccount" method="post">
+                        <input type="hidden" value="<%= user.email %>">
+                        <input type="submit" value="Remove">
+                    </form>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+    <div>
+        
+    </div>
+</body>
+</html>
