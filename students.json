@@ -1,38 +1,7 @@
 [
   {
-    "email": "techCentro@deployment.com",
-    "password": "b7nfLZXZRSgE"
-  },
-  {
-    "email": "test@example.com",
-    "password": "test"
-  },
-  {
-    "email": "test2@example.com",
-    "password": "test2"
-  },
-  {
-    "email": "testRole@email.com",
-    "password": "roletest"
-  },
-  {
-    "email": "roletest2@example.com",
-    "password": "roletest2",
-    "role": "role"
-  },
-  {
-    "email": "role@test.com",
-    "password": "role",
-    "role": "student"
-  },
-  {
-    "email": "Hello",
-    "password": "Hello",
-    "role": "role"
-  },
-  {
-    "email": "admintest@admin.com",
-    "password": "admin",
+    "email": "admin@admin.com",
+    "password": "AdminTest568",
     "role": "admin"
   }
 ]
