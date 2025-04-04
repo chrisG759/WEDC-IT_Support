@@ -1,10 +1,5 @@
 [
   {
-    "email": "roletest2@example.com",
-    "password": "roletest2",
-    "role": "role"
-  },
-  {
     "email": "role@test.com",
     "password": "role",
     "role": "student"
