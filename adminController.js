@@ -145,10 +145,10 @@ async function uploadModule(req, res) {
     }
 }
 
-async function removeModule(req, res){
+async function removeModule(req, res) {
     const removalModule = req.body.mod;
 
-    try{
+    try {
         const response = await axios.get(
             `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
             {
@@ -156,30 +156,45 @@ async function removeModule(req, res){
             }
         );
 
+        
+
         const fileSha = response.data.sha;
         const content = Buffer.from(response.data.content, 'base64').toString();
         const modules = JSON.parse(content);
 
-        const updatedModules = modules.filter(modules => modules.Name !== removalModule.Name);
+        const updatedModules = modules.filter(modules => modules.Name !== removalModule);
+        const updatedContent = Buffer.from(JSON.stringify(updatedModules, null, 2)).toString('base64');
 
-        await axios.post(
+        await axios.put(
             `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
             {
                 message: 'Module Removed',
-                content: Buffer.from(JSON.stringify(updatedModules, null, 2)).toString('base64'),
+                content: updatedContent,
                 sha: fileSha,
                 branch: BRANCH
             },
             {
                 headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
             }
-        )
+        );
 
-        return res.render('Modules', {modules : updatedModules});
-    } catch(error){
-        console.error("Error removing module: ", error);
-        return res.status(500).json({message : "Internal server error"});
+        const updatedResponse = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        const reloadContent = Buffer.from(updatedResponse.data.content, 'base64').toString();
+        const reloadModules = JSON.parse(reloadContent); 
+
+        return res.render('Modules', {modules : reloadModules});
+
+    } catch (error){
+        console.error("Could not find module: ", error);
+        return res.status(500).json({message : "Internal Server Error"});
     }
+    
 }
 
 
