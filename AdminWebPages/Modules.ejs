@@ -6,6 +6,9 @@
     <title>Edit Modules</title>
 </head>
 <body>
-    
+    <% for(let data in datas) {%>
+        <p><%= datas[data].name %></p>
+        <p><%= datas[data].path %></p>
+    <% } %>
 </body>
 </html>

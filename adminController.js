@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const axios = require('axios');
+const { json } = require('stream/consumers');
+const fs = require('fs');
 
 const app = express();
 
@@ -74,9 +76,24 @@ async function deleteRegistration(req, res) {
     }
 }
 
+function getModules(req, res) {
+    fs.readFile(path.join(__dirname, 'modules.json'), 'utf8', (err, data) => {
+        if (err) {
+            console.error("Error loading modules:", err);
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
 
-function getModules(req, res){
-    return res.sendFile(path.join(__dirname, '/AdminWebPages/Modules.html'));
+        try {
+            for(var element in data){
+                console.log(element.name, element.data);
+                
+            }
+            return;
+        } catch (parseErr) {
+            console.error("Error parsing modules JSON:", parseErr);
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    });
 }
 
 module.exports = {
