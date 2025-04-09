@@ -26,5 +26,9 @@
   {
     "Name": "PC and Hardware 📁",
     "Path": "../LecturesWebPages/PC_Hardware/pc.html"
+  },
+  {
+    "Name": "test",
+    "Path": "test"
   }
 ]
