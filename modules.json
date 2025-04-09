@@ -34,5 +34,9 @@
   {
     "Name": "testModule2",
     "Path": "test"
+  },
+  {
+    "Name": "testModule2",
+    "Path": "test"
   }
 ]
