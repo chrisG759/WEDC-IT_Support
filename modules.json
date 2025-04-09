@@ -30,5 +30,9 @@
   {
     "Name": "newModule",
     "Path": "modulePath"
+  },
+  {
+    "Name": "testModule2",
+    "Path": "test"
   }
 ]
