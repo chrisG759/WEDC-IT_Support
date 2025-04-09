@@ -6,9 +6,29 @@
     <title>Edit Modules</title>
 </head>
 <body>
-    <% for(let data in datas) {%>
-        <p><%= datas[data].name %></p>
-        <p><%= datas[data].path %></p>
-    <% } %>
+    <table>
+        <tr>
+            <td>Module Name</td>
+            <td>Module Path</td>
+            <td>Actions</td>
+        </tr>
+        <% for(let mod of modules) { %>
+            <tr>
+                <td><%= mod.Name %></td>
+                <td><%= mod.Path %></td>
+                <td>
+                    <form action="/admin-removeModule" method="post">
+                        <input type="hidden" name="mod" value="<%= mod.Name %>">
+                        <input type="submit" value="Remove Module">
+                    </form>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+    <div>
+        <form action="/admin-addModule" method="get">
+            <input type="submit" value="Add Module">
+        </form>
+    </div>
 </body>
 </html>

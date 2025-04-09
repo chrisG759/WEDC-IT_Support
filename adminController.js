@@ -76,29 +76,119 @@ async function deleteRegistration(req, res) {
     }
 }
 
-function getModules(req, res) {
-    fs.readFile(path.join(__dirname, 'modules.json'), 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error loading modules:", err);
-            return res.status(500).json({ message: "Internal Server Error" });
-        }
+async function getModules(req, res) {
 
-        try {
-            for(var element in data){
-                console.log(element.name, element.data);
-                
+    try{
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
             }
-            return;
-        } catch (parseErr) {
-            console.error("Error parsing modules JSON:", parseErr);
-            return res.status(500).json({ message: "Internal Server Error" });
-        }
-    });
+        );
+
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const data = JSON.parse(content);
+
+        return res.render('Modules', {modules : data});
+
+    } catch(error){
+        console.error("Error retrieving modules: ", error);
+        return res.status(500).json({message : "Internal Server Error"});
+    }
 }
+
+function addModulePage(req, res){
+    return res.render('addModule');
+}
+
+async function uploadModule(req, res) {
+    const moduleName = req.body.moduleName;
+    const modulePath = req.body.modulePath;
+
+    try {
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        const fileSha = response.data.sha;
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const modules = JSON.parse(content);
+
+        modules.push({
+            Name: moduleName,
+            Path: modulePath
+        });
+
+        const updatedContent = Buffer.from(JSON.stringify(modules, null, 2)).toString('base64');
+
+        await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                message: 'Module Added',
+                content: updatedContent,
+                sha: fileSha,
+                branch: BRANCH
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        return res.render('Modules', {modules : modules});
+
+    } catch (error) {
+        console.error("Error uploading module: ", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+async function removeModule(req, res){
+    const removalModule = req.body.mod;
+
+    try{
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        const fileSha = response.data.sha;
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const modules = JSON.parse(content);
+
+        const updatedModules = modules.filter(modules => modules.Name !== removalModule.Name);
+
+        await axios.post(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                message: 'Module Removed',
+                content: Buffer.from(JSON.stringify(updatedModules, null, 2)).toString('base64'),
+                sha: fileSha,
+                branch: BRANCH
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        )
+
+        return res.render('Modules', {modules : updatedModules});
+    } catch(error){
+        console.error("Error removing module: ", error);
+        return res.status(500).json({message : "Internal server error"});
+    }
+}
+
 
 module.exports = {
     getGrades, 
     getModules,
     getAccountsPage,
-    deleteRegistration
+    deleteRegistration,
+    addModulePage,
+    uploadModule,
+    removeModule
 };

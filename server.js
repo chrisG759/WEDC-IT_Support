@@ -52,7 +52,12 @@ app.get('/admin-modules', adminControl.getModules);
 app.get('/admin-accounts', adminControl.getAccountsPage);
 //delete account
 app.post('/admin-deleteAccount', adminControl.deleteRegistration)
-
+// Get add module page
+app.get('/admin-addModule', adminControl.addModulePage);
+// Upload new module
+app.post('/admin-uploadModule', adminControl.uploadModule);
+// Remove module
+app.post('/admin-removeModule', adminControl.removeModule);
 
 // index path
 app.get("/Wedc-It", (req, res) => {
