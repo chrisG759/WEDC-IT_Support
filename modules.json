@@ -25,13 +25,13 @@
     "Hidden": "false"
   },
   {
-    "Name": "Basic Excel 📁",
-    "Path": "../LecturesWebPages/Excel/excel.html",
-    "Hidden": true
-  },
-  {
     "Name": "Advanced Excel 📁",
     "Path": "../LecturesWebPages/Excel/advancedExcel.html",
+    "Hidden": "false"
+  },
+  {
+    "Name": "Basic Excel 📁",
+    "Path": "../LecturesWebPages/Excel/excel.html",
     "Hidden": "false"
   }
 ]
