@@ -32,6 +32,6 @@
   {
     "Name": "Advanced Excel 📁",
     "Path": "../LecturesWebPages/Excel/advancedExcel.html",
-    "Hidden": true
+    "Hidden": "false"
   }
 ]
