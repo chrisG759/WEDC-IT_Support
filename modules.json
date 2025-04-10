@@ -1,30 +1,37 @@
 [
   {
     "Name": "Basic Excel 📁",
-    "Path": "../LecturesWebPages/Excel/excel.html"
+    "Path": "../LecturesWebPages/Excel/excel.html",
+    "Hidden": "false"
   },
   {
     "Name": "Advanced Excel 📁",
-    "Path": "../LecturesWebPages/Excel/advancedExcel.html"
+    "Path": "../LecturesWebPages/Excel/advancedExcel.html",
+    "Hidden": "false"
   },
   {
     "Name": "Basic Teams 📁",
-    "Path": "../LecturesWebPages/Teams/teams.html"
+    "Path": "../LecturesWebPages/Teams/teams.html",
+    "Hidden": "false"
   },
   {
     "Name": "Advanced Teams 📁",
-    "Path": "../LecturesWebPages/Teams/advancedTeam.html"
+    "Path": "../LecturesWebPages/Teams/advancedTeam.html",
+    "Hidden": "false"
   },
   {
     "Name": "Operating System 📁",
-    "Path": "../LecturesWebPages/OS/os.html"
+    "Path": "../LecturesWebPages/OS/os.html",
+    "Hidden": "false"
   },
   {
     "Name": "DBMS 📁",
-    "Path": "../LecturesWebPages/DBMS/dbms.html"
+    "Path": "../LecturesWebPages/DBMS/dbms.html",
+    "Hidden" : "false"
   },
   {
     "Name": "PC and Hardware 📁",
-    "Path": "../LecturesWebPages/PC_Hardware/pc.html"
+    "Path": "../LecturesWebPages/PC_Hardware/pc.html",
+    "Hidden": "false"
   }
 ]

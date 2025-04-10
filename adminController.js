@@ -191,7 +191,7 @@ async function removeModule(req, res) {
         return res.render('Modules', {modules : reloadModules});
 
     } catch (error){
-        console.error("Could not find module: ", error);
+        console.error("Could not remove module: ", error);
         return res.status(500).json({message : "Internal Server Error"});
     }
     

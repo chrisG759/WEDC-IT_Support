@@ -16,6 +16,7 @@
             <tr>
                 <td><%= mod.Name %></td>
                 <td><%= mod.Path %></td>
+                <td><%= mod.Hidden%></td>
                 <td>
                     <form action="/admin-removeModule" method="post">
                         <input type="hidden" name="mod" value="<%= mod.Name %>">
@@ -30,8 +31,5 @@
             <input type="submit" value="Add Module">
         </form>
     </div>
-    <script>
-        
-    </script>
 </body>
 </html>
