@@ -1,10 +1,5 @@
 [
   {
-    "Name": "Basic Excel 📁",
-    "Path": "../LecturesWebPages/Excel/excel.html",
-    "Hidden": "false"
-  },
-  {
     "Name": "Advanced Excel 📁",
     "Path": "../LecturesWebPages/Excel/advancedExcel.html",
     "Hidden": "false"
@@ -27,11 +22,16 @@
   {
     "Name": "DBMS 📁",
     "Path": "../LecturesWebPages/DBMS/dbms.html",
-    "Hidden" : "false"
+    "Hidden": "false"
   },
   {
     "Name": "PC and Hardware 📁",
     "Path": "../LecturesWebPages/PC_Hardware/pc.html",
     "Hidden": "false"
+  },
+  {
+    "Name": "Basic Excel 📁",
+    "Path": "../LecturesWebPages/Excel/excel.html",
+    "Hidden": true
   }
 ]
