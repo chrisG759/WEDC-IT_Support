@@ -4,31 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Modules</title>
+    <style>
+        .all-modules{
+            justify-content: center;
+        }
+
+        .all-modules table{
+            margin: 0 auto;
+        }
+
+        .all-modules td{
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .all-modules form{
+            display: flex;
+        }
+        .addModule-button{
+            text-align: center;
+            background-color: #f4a261;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
+    </style>
 </head>
 <body>
-    <table>
-        <tr>
-            <td>Module Name</td>
-            <td>Module Path</td>
-            <td>Actions</td>
-        </tr>
-        <% for(let mod of modules) { %>
+    <div class="all-modules">
+        <table>
             <tr>
-                <td><%= mod.Name %></td>
-                <td><%= mod.Path %></td>
-                <td><%= mod.Hidden%></td>
-                <td>
-                    <form action="/admin-removeModule" method="post">
-                        <input type="hidden" name="mod" value="<%= mod.Name %>">
-                        <input type="submit" id="removeModule" value="Remove Module">
-                    </form>
-                </td>
+                <td>Module Name</td>
+                <td>Module Path</td>
+                <td>Published</td>
+                <td>Actions</td>
             </tr>
-        <% } %>
-    </table>
-    <div>
+            <% for(let mod of modules) { %>
+                <tr>
+                    <td><%= mod.Name %></td>
+                    <td><%= mod.Path %></td>
+                    <td>
+                        <% if (mod.Hidden == "false") { %>
+                            <p>Published</p>
+                        <% } else { %>
+                            <p>Unpublished</p>
+                        <% } %>
+                    </td>
+                    <td>
+                        <form action="/admin-removeModule" method="post">
+                            <input type="hidden" name="modName" value="<%= mod.Name %>">
+                            <input type="submit" id="removeModule" value="Remove Module">
+                        </form>
+                        <% if (mod.Hidden == "false") { %>
+                            <form action="/admin-unpublishModule" method="post">
+                                <input type="hidden" name="Name" value="<%= mod.Name %>">
+                                <input type="hidden" name="Path" value="<%= mod.Path %>">
+                                <input type="hidden" name="Hidden" value="<%= mod.Hidden %>">
+                                <input type="submit" value="Unpublish Module">
+                            </form>
+                        <% } else { %>
+                            <form action="/admin-publishModule" method="post">
+                                <input type="hidden" name="Name" value="<%= mod.Name %>">
+                                <input type="hidden" name="Path" value="<%= mod.Path %>">
+                                <input type="hidden" name="Hidden" value="<%= mod.Hidden %>">
+                                <input type="submit" name="publishMod" value="Publish Module">
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+    <div class="add-module">
         <form action="/admin-addModule" method="get">
-            <input type="submit" value="Add Module">
+            <input type="submit" value="Add Module" id="addModule-button">
         </form>
     </div>
 </body>

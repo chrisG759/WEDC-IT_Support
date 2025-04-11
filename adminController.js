@@ -7,6 +7,7 @@ const fs = require('fs');
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({extended : true}));
 
 app.set('view engine', 'ejs');
 app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'AdminWebPages')]);
@@ -197,6 +198,102 @@ async function removeModule(req, res) {
     
 }
 
+async function publishModule(req, res){
+    const modInfo = req.body;
+
+    try{
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: {Authorization: `Bearer ${GITHUB_TOKEN}`}
+            }
+        );
+
+        const fileSha = response.data.sha;
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const modules = JSON.parse(content);
+
+        const filteredMods = modules.filter(mod => mod.Name !== modInfo.Name);
+        
+        var updatedModules = filteredMods;
+
+        updatedModules.push({
+            "Name": modInfo.Name,
+            "Path": modInfo.Path,
+            "Hidden": "false"
+        });
+
+        const updatedModuleContent = Buffer.from(JSON.stringify(updatedModules, null, 2)).toString('base64');
+
+        await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                message: 'Module Published',
+                content: updatedModuleContent,
+                sha: fileSha,
+                branch: BRANCH
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        return res.render('Modules', {modules : updatedModules});
+
+    } catch(error) {
+        console.error("Error unpublishing module: ", error);
+        return res.status(500).json({message : "Internal Server Error"});
+    } 
+}
+
+async function unpublishModule(req, res){
+    const modInfo = req.body;
+
+    try{
+        const response = await axios.get(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                headers: {Authorization: `Bearer ${GITHUB_TOKEN}`}
+            }
+        );
+
+        const fileSha = response.data.sha;
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const modules = JSON.parse(content);
+
+        const filteredMods = modules.filter(mod => mod.Name !== modInfo.Name);
+        
+        var updatedModules = filteredMods;
+
+        updatedModules.push({
+            "Name": modInfo.Name,
+            "Path": modInfo.Path,
+            "Hidden": "true"
+        });
+
+        const updatedModuleContent = Buffer.from(JSON.stringify(updatedModules, null, 2)).toString('base64');
+
+        await axios.put(
+            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+            {
+                message: 'Module Unpublished',
+                content: updatedModuleContent,
+                sha: fileSha,
+                branch: BRANCH
+            },
+            {
+                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            }
+        );
+
+        return res.render('Modules', {modules : updatedModules});
+
+    } catch(error) {
+        console.error("Error unpublishing module: ", error);
+        return res.status(500).json({message : "Internal Server Error"});
+    } 
+}
+
 
 module.exports = {
     getGrades, 
@@ -205,5 +302,7 @@ module.exports = {
     deleteRegistration,
     addModulePage,
     uploadModule,
-    removeModule
+    removeModule,
+    unpublishModule,
+    publishModule
 };

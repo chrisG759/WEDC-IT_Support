@@ -64,17 +64,17 @@
         <button type="submit">Logout</button>
     </form>
     <table>
-        <tr>
-            <td><a href="../LecturesWebPages/Excel/excel.html" class="folder-button">Basic Excel 📁</a></td>
-            <td><a href="../LecturesWebPages/Excel/advancedExcel.html" class="folder-button">Advanced Excel 📁</a></td>
-            <td><a href="../LecturesWebPages/Teams/teams.html" class="folder-button">Basic Teams 📁</a></td>
-            <td><a href="../LecturesWebPages/Teams/advancedTeam.html" class="folder-button">Advanced Teams 📁</a></td>
-        </tr>
-        <tr>
-            <td><a href="../LecturesWebPages/OS/os.html" class="folder-button">Operating System 📁</a></td>
-            <td><a href="../LecturesWebPages/DBMS/dbms.html" class="folder-button">DBMS 📁</a></td>
-            <td><a href="../LecturesWebPages/PC_Hardware/pc.html" class="folder-button">PC and Hardware 📁</a></td>
-        </tr>
+        <% for (let i = 0; i < modules.length; i++) { %>
+            <% if (i % 2 === 0) { %>
+                <tr>
+            <% } %>
+        
+            <td><a href="<%= modules[i].Path %>" class="folder-button"><%= modules[i].Name %></a></td>
+        
+            <% if (i % 2 === 1 || i === modules.length - 1) { %>
+                </tr>
+            <% } %>
+        <% } %>        
     </table>
     <div class="back_buts">
         <form action="/Wedc-It">

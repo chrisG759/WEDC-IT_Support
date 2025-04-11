@@ -28,7 +28,7 @@ app.use(session({
   }));
 
 app.set('view engine', 'ejs');
-app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'AdminWebPages')]);
+app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'AdminWebPages'), path.join(__dirname, 'LecturesWebPages')]);
 
 if (!process.env.GITHUB_TOKEN) {
     console.error("GITHUB_TOKEN is missing from .env file.");
@@ -58,6 +58,10 @@ app.get('/admin-addModule', adminControl.addModulePage);
 app.post('/admin-uploadModule', adminControl.uploadModule);
 // Remove module
 app.post('/admin-removeModule', adminControl.removeModule);
+// Publish module
+app.post('/admin-publishModule', adminControl.publishModule);
+// Unpublish module
+app.post('/admin-unpublishModule', adminControl.unpublishModule);
 
 // index path
 app.get("/Wedc-It", (req, res) => {
@@ -91,8 +95,25 @@ app.get("/logout", (req, res) => {
 app.post("/studentSignup", registrationControl.signup);
 
 // wedc IT folder route
-app.get("/LecturesWebPages/lectures.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "/LecturesWebPages/lectures.html"))
+app.get("/LecturesWebPages/lectures.html", async (req, res) => {
+    try{
+        const response = await axios.get(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+        {
+            headers: {Authorization: `Bearer ${GITHUB_TOKEN}`}
+        }
+        );
+
+        const content = Buffer.from(response.data.content, 'base64').toString();
+        const data = JSON.parse(content);
+
+        const publishedModules = data.filter((module) => module.Hidden !== "true");
+
+        return res.render('lectures', {modules : publishedModules});
+    } catch(error){
+        console.err("Error returning modules: ", error);
+        return res.status(500).json({message : "Internal Server Error"});
+    }
 });
 
 // Excel upload assignment page route
