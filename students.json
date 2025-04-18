@@ -3,5 +3,10 @@
     "email": "admin@admin.com",
     "password": "AdminTest568",
     "role": "admin"
+  },
+  {
+    "email": "student@email.com",
+    "password": "student",
+    "role": "student"
   }
 ]
