@@ -1,10 +1,5 @@
 [
   {
-    "Name": "PC and Hardware 📁",
-    "Path": "../LecturesWebPages/PC_Hardware/pc.html",
-    "Hidden": "false"
-  },
-  {
     "Name": "Advanced Excel 📁",
     "Path": "../LecturesWebPages/Excel/advancedExcel.html",
     "Hidden": "false"
@@ -32,6 +27,11 @@
   {
     "Name": "DBMS 📁",
     "Path": "../LecturesWebPages/DBMS/dbms.html",
+    "Hidden": "true"
+  },
+  {
+    "Name": "PC and Hardware 📁",
+    "Path": "../LecturesWebPages/PC_Hardware/pc.html",
     "Hidden": "true"
   }
 ]
