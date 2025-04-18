@@ -7,21 +7,36 @@
     <style>
         .all-modules{
             justify-content: center;
+            color: white;
         }
 
         .all-modules table{
             margin: 0 auto;
+            border: 1px solid;
+            color: white;
+            border-radius: 3px;
+            text-align: center;
         }
 
         .all-modules td{
-            margin-bottom: 20px;
-            margin-top: 20px;
+            background-color: #f4a261;
+            padding: 12px;
         }
 
-        .all-modules form{
-            display: flex;
-        }
-        .addModule-button{
+        #removeModule-button{
+            text-align: center;
+            background-color: #f4a261;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }  
+
+        #publishModule-button{
             text-align: center;
             background-color: #f4a261;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -33,9 +48,87 @@
             cursor: pointer;
             margin-top: 1cm;
         }
+
+        #unpublishModule-button{
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #f4a261;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
+
+        #publishMod-button{
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #f4a261;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
+
+        #removeMod-button{
+            text-align: center;
+            background-color: #f4a261;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
+
+        #addModule-button{
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #f4a261;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
+        .add-module{
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #home_button{
+            margin-top: .5cm;
+            text-align: center;
+            background-color: #f4a261;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: white;
+            width: 5cm;
+            height: 1cm;
+            border-radius: .5cm;
+            border: 0px;
+            cursor: pointer;
+            margin-top: 1cm;
+        }
     </style>
 </head>
 <body>
+    <div class="add-module">
+        <form action="/admin-addModule" method="get">
+            <input type="submit" value="Add Module" id="addModule-button">
+        </form>
+        <form action="/WEDC-It">
+            <input type="submit" value="Home" id="home_button">
+        </form>
+    </div>
+
     <div class="all-modules">
         <table>
             <tr>
@@ -58,21 +151,21 @@
                     <td>
                         <form action="/admin-removeModule" method="post">
                             <input type="hidden" name="modName" value="<%= mod.Name %>">
-                            <input type="submit" id="removeModule" value="Remove Module">
+                            <input type="submit" value="Remove Module" id="removeMod-button">
                         </form>
                         <% if (mod.Hidden == "false") { %>
                             <form action="/admin-unpublishModule" method="post">
                                 <input type="hidden" name="Name" value="<%= mod.Name %>">
                                 <input type="hidden" name="Path" value="<%= mod.Path %>">
                                 <input type="hidden" name="Hidden" value="<%= mod.Hidden %>">
-                                <input type="submit" value="Unpublish Module">
+                                <input type="submit" value="Unpublish Module" id="unpublishModule-button">
                             </form>
                         <% } else { %>
                             <form action="/admin-publishModule" method="post">
                                 <input type="hidden" name="Name" value="<%= mod.Name %>">
                                 <input type="hidden" name="Path" value="<%= mod.Path %>">
                                 <input type="hidden" name="Hidden" value="<%= mod.Hidden %>">
-                                <input type="submit" name="publishMod" value="Publish Module">
+                                <input type="submit" name="publishMod" value="Publish Module" id="publishMod-button">
                             </form>
                         <% } %>
                     </td>
@@ -80,10 +173,6 @@
             <% } %>
         </table>
     </div>
-    <div class="add-module">
-        <form action="/admin-addModule" method="get">
-            <input type="submit" value="Add Module" id="addModule-button">
-        </form>
-    </div>
+    
 </body>
 </html>
