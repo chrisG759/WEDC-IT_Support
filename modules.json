@@ -1,10 +1,5 @@
 [
   {
-    "Name": "Advanced Teams 📁",
-    "Path": "../LecturesWebPages/Teams/advancedTeam.html",
-    "Hidden": "false"
-  },
-  {
     "Name": "Operating System 📁",
     "Path": "../LecturesWebPages/OS/os.html",
     "Hidden": "false"
@@ -33,5 +28,10 @@
     "Name": "Basic Teams 📁",
     "Path": "../LecturesWebPages/Teams/teams.html",
     "Hidden": "false"
+  },
+  {
+    "Name": "Advanced Teams 📁",
+    "Path": "../LecturesWebPages/Teams/advancedTeam.html",
+    "Hidden": "true"
   }
 ]
