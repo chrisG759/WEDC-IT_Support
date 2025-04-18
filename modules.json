@@ -1,10 +1,5 @@
 [
   {
-    "Name": "Operating System 📁",
-    "Path": "../LecturesWebPages/OS/os.html",
-    "Hidden": "false"
-  },
-  {
     "Name": "DBMS 📁",
     "Path": "../LecturesWebPages/DBMS/dbms.html",
     "Hidden": "false"
@@ -33,5 +28,10 @@
     "Name": "Advanced Teams 📁",
     "Path": "../LecturesWebPages/Teams/advancedTeam.html",
     "Hidden": "false"
+  },
+  {
+    "Name": "Operating System 📁",
+    "Path": "../LecturesWebPages/OS/os.html",
+    "Hidden": "true"
   }
 ]
