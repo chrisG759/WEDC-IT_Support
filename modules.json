@@ -33,5 +33,9 @@
     "Name": "PC and Hardware 📁",
     "Path": "../LecturesWebPages/PC_Hardware/pc.html",
     "Hidden": "true"
+  },
+  {
+    "Name": "admin test module",
+    "Path": "test module"
   }
 ]
