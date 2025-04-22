@@ -41,95 +41,54 @@ async function uploadToGitHub(filePath, content, message) {
 async function uploadAndExtract(req, res, folderPath) {
     try {
         if (!req.file) {
-            console.log("❌ No file received."); // Log missing file
+            console.log("No file received.");
             return res.status(400).json({ message: "No file uploaded." });
         }
 
         const fileBuffer = req.file.buffer;
         const originalFileName = req.file.originalname;
+        const extension = path.extname(originalFileName).toLowerCase();
 
-        console.log(`🟡 Uploaded file name: ${originalFileName}`);
-        console.log(`🟡 File extension: ${path.extname(originalFileName)}`);
-        console.log(`🟡 File buffer size: ${fileBuffer.length} bytes`);
+        console.log(`Uploaded file: ${originalFileName}`);
+        console.log(`Extension: ${extension}`);
+        console.log(`Buffer size: ${fileBuffer.length} bytes`);
 
-        if (path.extname(originalFileName).toLowerCase() !== ".zip") {
-            console.log("❌ Uploaded file is NOT a ZIP archive.");
-            return res.status(400).json({ message: "Uploaded file is not a ZIP archive." });
-        }
-
-        console.log("🟢 File is recognized as ZIP, attempting to extract...");
-
-        // Try opening the ZIP archive
-        const zip = await unzipper.Open.buffer(fileBuffer);
-        console.log(`🟢 ZIP file successfully recognized! Contains ${zip.files.length} files.`);
-
-        // Create a root folder name based on the zip file name (without extension)
-        const rootFolderName = path.basename(originalFileName, '.zip');
+        const rootFolderName = path.basename(originalFileName, extension);
         const rootFolderPath = `${folderPath}/${rootFolderName}`;
 
-        // Iterate over the files in the zip archive
-        const uploadPromises = zip.files.map(async (file) => {
-            if (file.type === "Directory") return; // Skip directories
+        if (extension === ".zip") {
+            console.log("ZIP detected. Attempting to extract...");
 
-            const content = await file.buffer();
-            const githubFilePath = `${rootFolderPath}/${file.path}`; // Ensure proper pathing
+            const zip = await unzipper.Open.buffer(fileBuffer);
+            console.log(`ZIP opened. Contains ${zip.files.length} files.`);
 
-            // Upload the extracted file to GitHub
-            await uploadToGitHub(githubFilePath, content, `Uploaded ${file.path}`);
-        });
+            const uploadPromises = zip.files.map(async (file) => {
+                if (file.type === "Directory") return;
 
-        await Promise.all(uploadPromises);
-        return res.status(200).json({ message: "Zip file uploaded and extracted successfully." });
-    } catch (error) {
-        console.error("❌ Error uploading file:", error.response?.data || error.message);
-        return res.status(500).json({ message: "Error uploading file." });
-    }
-}
+                const content = await file.buffer();
+                const githubFilePath = `${rootFolderPath}/${file.path}`;
 
-async function uploadAndExtract(req, res, folderPath) {
-    try {
-        if (!req.file) {
-            console.log("❌ No file received."); // Log missing file
-            return res.status(400).json({ message: "No file uploaded." });
+                await uploadToGitHub(githubFilePath, content, `Uploaded ${file.path}`);
+            });
+
+            await Promise.all(uploadPromises);
+            return res.status(200).json({ message: "ZIP file extracted and uploaded successfully." });
+
+        } else {
+            console.log("Non-ZIP file detected. Uploading raw file...");
+
+            const githubFilePath = `${folderPath}/${originalFileName}`;
+            await uploadToGitHub(githubFilePath, fileBuffer, `Uploaded ${originalFileName}`);
+            return res.status(200).json({ message: "File uploaded successfully." });
         }
-
-        const fileBuffer = req.file.buffer;
-        const originalFileName = req.file.originalname;
-
-        console.log(`🟡 Uploaded file name: ${originalFileName}`);
-        console.log(`🟡 File extension: ${path.extname(originalFileName)}`);
-        console.log(`🟡 File buffer size: ${fileBuffer.length} bytes`);
-
-        if (path.extname(originalFileName).toLowerCase() !== ".zip") {
-            console.log("❌ Uploaded file is NOT a ZIP archive.");
-            return res.status(400).json({ message: "Uploaded file is not a ZIP archive." });
-        }
-
-        console.log("🟢 File is recognized as ZIP, attempting to extract...");
-
-        // Try opening the ZIP archive
-        const zip = await unzipper.Open.buffer(fileBuffer);
-        console.log(`🟢 ZIP file successfully recognized! Contains ${zip.files.length} files.`);
-
-        // Create a root folder name based on the zip file name (without extension)
-        const rootFolderName = path.basename(originalFileName, '.zip');
-        const rootFolderPath = `${folderPath}/${rootFolderName}`;
-
-        // Iterate over the files in the zip archive
-        const uploadPromises = zip.files.map(async (file) => {
-            if (file.type === "Directory") return; // Skip directories
-
-            const content = await file.buffer();
-            const githubFilePath = `${rootFolderPath}/${file.path}`; // Ensure proper pathing
-
-            // Upload the extracted file to GitHub
-            await uploadToGitHub(githubFilePath, content, `Uploaded ${file.path}`);
-        });
-
-        await Promise.all(uploadPromises);
-        return res.status(200).json({ message: "Zip file uploaded and extracted successfully." });
     } catch (error) {
-        console.error("❌ Error uploading file:", error.response?.data || error.message);
+        console.log("❌ Upload error:", {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status,
+            stack: error.stack
+        });
+        
         return res.status(500).json({ message: "Error uploading file." });
     }
 }

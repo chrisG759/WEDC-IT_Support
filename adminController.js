@@ -99,50 +99,57 @@ async function getModules(req, res) {
 }
 
 function addModulePage(req, res){
-    return res.render('addModule');
+    return res.render('addModule', {error : null});
 }
 
 async function uploadModule(req, res) {
     const moduleName = req.body.moduleName;
     const modulePath = req.body.modulePath;
+    const publishingBox = req.body['publishing-detail'];
 
-    try {
-        const response = await axios.get(
-            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
-            {
-                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
-            }
-        );
-
-        const fileSha = response.data.sha;
-        const content = Buffer.from(response.data.content, 'base64').toString();
-        const modules = JSON.parse(content);
-
-        modules.push({
-            Name: moduleName,
-            Path: modulePath
-        });
-
-        const updatedContent = Buffer.from(JSON.stringify(modules, null, 2)).toString('base64');
-
-        await axios.put(
-            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
-            {
-                message: 'Module Added',
-                content: updatedContent,
-                sha: fileSha,
-                branch: BRANCH
-            },
-            {
-                headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
-            }
-        );
-
-        return res.render('Modules', {modules : modules});
-
-    } catch (error) {
-        console.error("Error uploading module: ", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+    if(publishingBox != 'undecided' && moduleName != '' && modulePath){
+        try {
+            const response = await axios.get(
+                `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+                {
+                    headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+                }
+            );
+    
+            const fileSha = response.data.sha;
+            const content = Buffer.from(response.data.content, 'base64').toString();
+            const modules = JSON.parse(content);
+    
+            modules.push({
+                Name: moduleName,
+                Path: modulePath,
+                
+            });
+    
+            const updatedContent = Buffer.from(JSON.stringify(modules, null, 2)).toString('base64');
+    
+            await axios.put(
+                `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/modules.json`,
+                {
+                    message: 'Module Added',
+                    content: updatedContent,
+                    sha: fileSha,
+                    branch: BRANCH
+                },
+                {
+                    headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+                }
+            );
+    
+            return res.render('Modules', {modules : modules});
+    
+        } catch (error) {
+            console.error("Error uploading module: ", error);
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    } else {
+        console.log("Module form not filled");
+        return res.render('addModule', {error : "Please complete form"});
     }
 }
 

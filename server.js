@@ -44,6 +44,7 @@ const STUDENTS_JSON_PATH = path.join(__dirname, "students.json");
 assignmentDeletion.deleteAllAssignments();
 
 // Admin paths
+
 // Admin-Grades
 app.get('/admin-grade', adminControl.getGrades);
 // Visable Modules for Students

@@ -15,12 +15,18 @@
             <input type="text" name="moduleName">
             <label for="modulePath">Module Path: </label>
             <input type="text" name="modulePath">
-            <select name="" id="">
-                <option value="">Published</option>
-                <option value="">Unpublished</option>
+            <select name="publishing-detail" id="module-visibility">
+                <option value="undecided">Select module visibility</option>
+                <option value="unpublished">Unpublished</option>
+                <option value="published">Published</option>
             </select>
-            <input type="submit" value="Add Module">
+            <input type="submit" value="Add Module" id="addMod-submit">
         </form>
     </div>
+        <% if(error != null){ %>
+            <div id="errorMessage"></div>
+                <h5>Error: <%= error %></h5>
+            </div>
+        <% } %>      
 </body>
 </html>

@@ -106,12 +106,13 @@
                 });
 
             
+                const result = await response.json();
+
                 if (response.ok) {
-                    alert("Assignment uploaded successfully!");
+                    alert(result.message || "Assignment uploaded successfully!");
                     fileInput.value = '';
                 } else {
-                    const result = await response.json();
-                    alert("Error uploading file.");
+                    alert(result.message || "Error uploading file.");
                     console.error(result);
                 }
 
