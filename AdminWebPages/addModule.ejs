@@ -4,29 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Module</title>
+    <style>
+        body{
+            height: 100%;
+            margin: 0;
+        }
+        .body-container{
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            flex-direction: column;
+            text-align: center;
+        }
+        .form-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid black;
+            width: 320px; 
+            padding: 20px;
+            background-color: #ff8e31;
+            color: white;
+            text-align: center;
+            border-radius: 10px; 
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 5cm; 
+        }
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%; 
+            padding: 5px;
+            margin: 5px 0;
+        }
+        input[type="submit"] {
+            background-color: white;
+            color: #ff8e31;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        #addForm table{
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <h1>Add Module</h1>
-    </div>
-    <div>
-        <form action="/admin-uploadModule" method="post">
-            <label for="moduleName">Module Name: </label>
-            <input type="text" name="moduleName">
-            <label for="modulePath">Module Path: </label>
-            <input type="text" name="modulePath">
-            <select name="publishing-detail" id="module-visibility">
-                <option value="undecided">Select module visibility</option>
-                <option value="unpublished">Unpublished</option>
-                <option value="published">Published</option>
-            </select>
-            <input type="submit" value="Add Module" id="addMod-submit">
-        </form>
-    </div>
-        <% if(error != null){ %>
-            <div id="errorMessage"></div>
-                <h5>Error: <%= error %></h5>
-            </div>
-        <% } %>      
+    <div class="body-container">
+        <div>
+            <h1>Add Module</h1>
+        </div>
+        <div class="form-container" align="center">
+            <form action="/admin-uploadModule" method="post" id="addMod-form">
+                <table align="center">
+                    <tr>
+                        <td><label for="moduleName">Module Name: </label></td>
+                        <td><input type="text" name="moduleName"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="modulePath">Module Path: </label></td>
+                        <td><input type="text" name="modulePath"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="module-publishing">Module visibility: </label></td>
+                        <td>
+                            <select name="publishing-detail" id="module-visibility" style="background-color: white; color: #ff8e31; padding: 12px; font-size: 15px;">
+                                <option value="undecided">Select module visibility</option>
+                                <option value="unpublished">Unpublished</option>
+                                <option value="published">Published</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <div><input type="submit" value="Add Module" id="addMod-submit"></div>
+            </form>
+        </div>
+            <% if(error != null){ %>
+                <div id="errorMessage"></div>
+                    <h5>Error: <%= error %></h5>
+                </div>
+            <% } %>
+    </div>     
 </body>
 </html>
