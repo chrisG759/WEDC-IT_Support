@@ -12,6 +12,10 @@ const assignmentDeletion = require("./assignmentDeletionController");
 const adminControl = require('./adminController');
 const registrationControl = require('./registrationController');
 const uploadControl = require('./fileUploadController');
+const OpenAI = require('openai');
+const openai = new OpenAI({
+    apiKey : process.env.OPENAI_API_KEY
+});
 
 const app = express();
 app.use(cors());
